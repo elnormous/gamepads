@@ -22,6 +22,7 @@ Some of the developers have more than one ID
 | Razer | 0x1689 |
 | Saitek | 0x0738 |
 | Sony | 0x054C |
+| SteelSeries | 0x1038 |
 | Tron | 0x1BAD |
 
 # Gamepads
@@ -50,7 +51,6 @@ Some of the developers have more than one ID
 | Gamestop Xbox 360 controller | 0x1BAD | 0xF901 |
 | GameStop Xbox 360 controller | 0x0E6F | 0x0401 |
 | Guitar Hero for PCMAC | 0x1430 | 0x474C |
-| Horipad EX2 TURBO | 0x1BAD | 0xF501 |
 | Harmonix Drum Kit for Xbox 360 | 0x1BAD | 0x0003 |
 | Harmonix Guitar for Xbox 360 | 0x1BAD | 0x0002 |
 | Hori Dead or Alive 4 Fight Stick | 0x0F0D | 0x000A |
@@ -60,6 +60,8 @@ Some of the developers have more than one ID
 | Hori Real Arcade Pro VXSA | 0x24C6 | 0x5501 |
 | Hori Real Arcade Pro VX | 0x1BAD | 0xF502 |
 | Hori Soulcalibur V Arcade Stick | 0x24C6 | 0x5506 |
+| Horipad EX2 TURBO | 0x1BAD | 0xF501 |
+| Horipad Ultimate | 0x0F0D | 0x0090 |
 | Joytech Neo Se | 0x1BAD | 0xF02D |
 | Joytech Neo Se Take2 | 0x162E | 0xBEEF |
 | Logitech Chill Stream | 0x046D | 0xC242 |
@@ -97,9 +99,10 @@ Some of the developers have more than one ID
 | Saitek P3200 Rumble Pad PCX box 360 | 0x0738 | 0xCB03 |
 | Sony Playstation 3 controller | 0x054C | 0x0268 |
 | Sony Playstation 4 controller | 0x054C | 0x05C4 |
+| SteelSeries Nimbus | 0x1038 | 0x1420 |
 | Street Fighter IV Fight Pad | 0x1BAD | 0xF028 |
 | Street Fighter IV Fight Stick Tournament Edition | 0x0738 | 0x4738 |
 | Super Street Fighter IV Fight Stick Tournament Edition S | 0x0738 | 0xF738 |
 | Tron Xbox 360 controller | 0x1BAD | 0xF903 |
 | USB Gamepad | 0x1BAD | 0x5500 |
-| XB 360 Mortal Kombat Fight Stick | 0x1BAD | 0xF906 |
+| Xbox 360 Mortal Kombat Fight Stick | 0x1BAD | 0xF906 |
