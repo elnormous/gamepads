@@ -100,7 +100,7 @@ Some of the developers have more than one ID
 | Saitek P3200 Rumble Pad PCX box 360 | 0x0738 | 0xCB03 | 4 |
 | Sony Playstation 3 controller | 0x054C | 0x0268 | 1 |
 | Sony Playstation 4 controller | 0x054C | 0x05C4 | 2 |
-| SteelSeries Nimbus | 0x1038 | 0x1420 | 4 | Apple GameController framework |
+| SteelSeries Nimbus | 0x1038 | 0x1420 | Apple GameController framework |
 | Street Fighter IV Fight Pad | 0x1BAD | 0xF028 | 4 |
 | Street Fighter IV Fight Stick Tournament Edition | 0x0738 | 0x4738 | 4 |
 | Super Street Fighter IV Fight Stick Tournament Edition S | 0x0738 | 0xF738 | 4 |
