@@ -11,6 +11,15 @@
 #include <pthread.h>
 #endif
 
+struct Thread
+{
+#if defined(_MSC_VER)
+    HANDLE handle;
+#else
+    pthread_t thread;
+#endif
+};
+
 struct Mutex
 {
 #if defined(_MSC_VER)
@@ -29,6 +38,9 @@ struct Condition
 #endif
 };
 
+int thread_init(struct Thread* thread, void*(*function)(void*), void* argument);
+int thread_destroy(struct Thread* thread);
+int thread_join(struct Thread* thread);
 int mutex_init(struct Mutex* mutex);
 int mutex_destroy(struct Mutex* mutex);
 int mutex_lock(struct Mutex* mutex);

@@ -4,6 +4,34 @@
 
 #include "thread.h"
 
+int thread_init(struct Thread* thread, void*(*function)(void*), void* argument)
+{
+#if defined(_MSC_VER)
+    thread->handle = CreateThread(NULL, 0, function, argument, 0, NULL);
+    return thread->handle != NULL;
+#else
+    return pthread_create(&thread->thread, NULL, function, argument) == 0;
+#endif
+}
+
+int thread_destroy(struct Thread* thread)
+{
+#if defined(_MSC_VER)
+    return CloseHandle(thread->handle);
+#else
+    return 1;
+#endif
+}
+
+int thread_join(struct Thread* thread)
+{
+#if defined(_MSC_VER)
+    return WaitForSingleObject(thread->handle, INFINITE) != WAIT_FAILED;
+#else
+    return pthread_join(thread->thread, NULL) == 0;
+#endif
+}
+
 int mutex_init(struct Mutex* mutex)
 {
 #if defined(_MSC_VER)
