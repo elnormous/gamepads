@@ -4,7 +4,7 @@
 
 #include "thread.h"
 
-int thread_init(struct Thread* thread, void*(*function)(void*), void* argument)
+int thread_init(Thread* thread, void*(*function)(void*), void* argument)
 {
 #if defined(_MSC_VER)
     thread->handle = CreateThread(NULL, 0, function, argument, 0, NULL);
@@ -14,7 +14,7 @@ int thread_init(struct Thread* thread, void*(*function)(void*), void* argument)
 #endif
 }
 
-int thread_destroy(struct Thread* thread)
+int thread_destroy(Thread* thread)
 {
 #if defined(_MSC_VER)
     return CloseHandle(thread->handle);
@@ -23,7 +23,7 @@ int thread_destroy(struct Thread* thread)
 #endif
 }
 
-int thread_join(struct Thread* thread)
+int thread_join(Thread* thread)
 {
 #if defined(_MSC_VER)
     return WaitForSingleObject(thread->handle, INFINITE) != WAIT_FAILED;
@@ -32,7 +32,7 @@ int thread_join(struct Thread* thread)
 #endif
 }
 
-int mutex_init(struct Mutex* mutex)
+int mutex_init(Mutex* mutex)
 {
 #if defined(_MSC_VER)
     InitializeCriticalSection(&mutex->critical_section);
@@ -42,7 +42,7 @@ int mutex_init(struct Mutex* mutex)
 #endif
 }
 
-int mutex_destroy(struct Mutex* mutex)
+int mutex_destroy(Mutex* mutex)
 {
 #if defined(_MSC_VER)
     return 1;
@@ -51,7 +51,7 @@ int mutex_destroy(struct Mutex* mutex)
 #endif
 }
 
-int mutex_lock(struct Mutex* mutex)
+int mutex_lock(Mutex* mutex)
 {
 #if defined(_MSC_VER)
     EnterCriticalSection(&mutex->critical_section);
@@ -61,7 +61,7 @@ int mutex_lock(struct Mutex* mutex)
 #endif
 }
 
-int mutex_unlock(struct Mutex* mutex)
+int mutex_unlock(Mutex* mutex)
 {
 #if defined(_MSC_VER)
     LeaveCriticalSection(&mutex->critical_section);
@@ -71,7 +71,7 @@ int mutex_unlock(struct Mutex* mutex)
 #endif
 }
 
-int condition_init(struct Condition* condition)
+int condition_init(Condition* condition)
 {
 #if defined(_MSC_VER)
     InitializeConditionVariable(&condition->condition_variable);
@@ -81,7 +81,7 @@ int condition_init(struct Condition* condition)
 #endif
 }
 
-int condition_destroy(struct Condition* condition)
+int condition_destroy(Condition* condition)
 {
 #if defined(_MSC_VER)
     return 1;
@@ -90,7 +90,7 @@ int condition_destroy(struct Condition* condition)
 #endif
 }
 
-int condition_signal(struct Condition* condition)
+int condition_signal(Condition* condition)
 {
 #if defined(_MSC_VER)
     WakeConditionVariable(&condition->condition_variable);
@@ -100,7 +100,7 @@ int condition_signal(struct Condition* condition)
 #endif
 }
 
-int condition_broadcast(struct Condition* condition)
+int condition_broadcast(Condition* condition)
 {
 #if defined(_MSC_VER)
     WakeAllConditionVariable(&condition->condition_variable);
@@ -110,7 +110,7 @@ int condition_broadcast(struct Condition* condition)
 #endif
 }
 
-int condition_wait(struct Condition* condition, struct Mutex* mutex)
+int condition_wait(Condition* condition, Mutex* mutex)
 {
 #if defined(_MSC_VER)
     return SleepConditionVariableCS(&condition->condition_variable, &mutex->critical_section, INFINITE);
@@ -119,7 +119,7 @@ int condition_wait(struct Condition* condition, struct Mutex* mutex)
 #endif
 }
 
-int condition_timedwait(struct Condition* condition, struct Mutex* mutex, uint64_t ns)
+int condition_timedwait(Condition* condition, Mutex* mutex, uint64_t ns)
 {
 #if defined(_MSC_VER)
     return SleepConditionVariableCS(&condition->condition_variable, &mutex->critical_section, (DWORD)(ns / 1000000));

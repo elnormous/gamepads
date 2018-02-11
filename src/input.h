@@ -4,15 +4,15 @@
 
 #pragma once
 
-struct Input
+typedef struct Input
 {
     void* opaque;
-};
+} Input;
 
-struct Gamepad
+typedef struct Gamepad
 {
     void* opaque;
-};
+} Gamepad;
 
-int input_init(struct Input* input);
-int input_destroy(struct Input* input);
+int input_init(Input* input);
+int input_destroy(Input* input);

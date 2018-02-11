@@ -10,7 +10,7 @@ int main(int argc, const char * argv[])
 {
     // TODO: parse arguments for log file
 
-    struct Input input;
+    Input input;
     input_init(&input);
 
     // TODO: detect gamepads

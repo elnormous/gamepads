@@ -48,7 +48,7 @@ CFMutableDictionaryRef create_device_matching_dictionary(UInt32 usage_page, UInt
     return dictionary;
 }
 
-int input_init(struct Input* input)
+int input_init(Input* input)
 {
     IOHIDManagerRef hid_manager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
 
