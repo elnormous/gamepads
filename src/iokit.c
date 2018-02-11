@@ -18,7 +18,30 @@ typedef struct InputIOKit
 
 static void device_added(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef device)
 {
-    fprintf(stdout, "Device added\n");
+    int32_t vendorId = 0;
+    int32_t productId = 0;
+    char name[256] = "";
+
+    CFNumberRef vendor = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDVendorIDKey));
+    if (vendor)
+    {
+        CFNumberGetValue(vendor, kCFNumberSInt32Type, &vendorId);
+    }
+
+    CFNumberRef product = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDProductIDKey));
+    if (product)
+    {
+        CFNumberGetValue(product, kCFNumberSInt32Type, &productId);
+    }
+
+    CFStringRef productName = (CFStringRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDProductKey));
+
+    if (productName)
+    {
+        CFStringGetCString(productName, name, sizeof(name), kCFStringEncodingUTF8);
+    }
+
+    fprintf(stdout, "%s, vendor ID: 0x%04X, product ID: 0x%04X\n", name, vendorId, productId);
 }
 
 static void device_removed(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef device)

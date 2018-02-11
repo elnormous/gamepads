@@ -13,12 +13,6 @@ int main(int argc, const char * argv[])
     Input input;
     input_init(&input);
 
-    // TODO: detect gamepads
-
-    // TODO: print gamepad info
-
-    // TODO: launch thread for gamepad input
-
     // TODO: print buttons and collect info
 
     // TODO: save log to file
