@@ -4,10 +4,14 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "input.h"
 
 int main(int argc, const char * argv[])
 {
     // TODO: parse arguments for log file
+
+    struct Input input;
+    input_init(&input);
 
     // TODO: detect gamepads
 

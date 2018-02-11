@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		300984F3202D38FF00BB0340 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984F2202D38FF00BB0340 /* main.c */; };
 		300984FB202E95F700BB0340 /* thread.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984FA202E95F700BB0340 /* thread.c */; };
+		300984FF202F365A00BB0340 /* iokit.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984FE202F365A00BB0340 /* iokit.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +29,9 @@
 		300984F2202D38FF00BB0340 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		300984F9202E95F700BB0340 /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
 		300984FA202E95F700BB0340 /* thread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = thread.c; sourceTree = "<group>"; };
+		300984FD202F365A00BB0340 /* iokit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iokit.h; sourceTree = "<group>"; };
+		300984FE202F365A00BB0340 /* iokit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = iokit.c; sourceTree = "<group>"; };
+		30098503202FDB4E00BB0340 /* input.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = input.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,9 +64,12 @@
 		300984F1202D38FF00BB0340 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				300984FE202F365A00BB0340 /* iokit.c */,
+				300984FD202F365A00BB0340 /* iokit.h */,
 				300984F2202D38FF00BB0340 /* main.c */,
 				300984FA202E95F700BB0340 /* thread.c */,
 				300984F9202E95F700BB0340 /* thread.h */,
+				30098503202FDB4E00BB0340 /* input.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -124,6 +131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				300984FF202F365A00BB0340 /* iokit.c in Sources */,
 				300984FB202E95F700BB0340 /* thread.c in Sources */,
 				300984F3202D38FF00BB0340 /* main.c in Sources */,
 			);
