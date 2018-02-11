@@ -3,7 +3,6 @@
 //
 
 #import <IOKit/hid/IOHIDManager.h>
-#include "iokit.h"
 #include "input.h"
 #include "thread.h"
 
@@ -22,26 +21,62 @@ static void device_added(void* ctx, IOReturn result, void* sender, IOHIDDeviceRe
     int32_t productId = 0;
     char name[256] = "";
 
-    CFNumberRef vendor = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDVendorIDKey));
-    if (vendor)
+    CFArrayRef usages = (CFArrayRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDDeviceUsagePairsKey));
+
+    if (usages)
     {
-        CFNumberGetValue(vendor, kCFNumberSInt32Type, &vendorId);
+        int32_t usage;
+        CFIndex i;
+        int isKeyboard = 0, isGamepad = 0;
+        CFIndex count = CFArrayGetCount(usages);
+
+        for (i = 0; i < count; ++i)
+        {
+            CFDictionaryRef value = (CFDictionaryRef)CFArrayGetValueAtIndex(usages, i);
+
+            CFNumberRef usageNumber = CFDictionaryGetValue(value, CFSTR(kIOHIDDeviceUsageKey));
+
+            if (usageNumber)
+            {
+                CFNumberGetValue(usageNumber, kCFNumberSInt32Type, &usage);
+
+                isKeyboard = (usage == kHIDUsage_GD_Keyboard);
+                isGamepad = (usage == kHIDUsage_GD_Joystick ||
+                             usage == kHIDUsage_GD_GamePad ||
+                             usage == kHIDUsage_GD_MultiAxisController);
+            }
+        }
+
+        if (isKeyboard)
+        {
+            printf("Keyboard\n");
+        }
+        else if (isGamepad)
+        {
+            printf("Gamepad\n");
+
+            CFNumberRef vendor = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDVendorIDKey));
+            if (vendor)
+            {
+                CFNumberGetValue(vendor, kCFNumberSInt32Type, &vendorId);
+            }
+
+            CFNumberRef product = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDProductIDKey));
+            if (product)
+            {
+                CFNumberGetValue(product, kCFNumberSInt32Type, &productId);
+            }
+
+            CFStringRef productName = (CFStringRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDProductKey));
+
+            if (productName)
+            {
+                CFStringGetCString(productName, name, sizeof(name), kCFStringEncodingUTF8);
+            }
+
+            fprintf(stdout, "Name: %s, vendor ID: 0x%04X, product ID: 0x%04X\n", name, vendorId, productId);
+        }
     }
-
-    CFNumberRef product = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDProductIDKey));
-    if (product)
-    {
-        CFNumberGetValue(product, kCFNumberSInt32Type, &productId);
-    }
-
-    CFStringRef productName = (CFStringRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDProductKey));
-
-    if (productName)
-    {
-        CFStringGetCString(productName, name, sizeof(name), kCFStringEncodingUTF8);
-    }
-
-    fprintf(stdout, "%s, vendor ID: 0x%04X, product ID: 0x%04X\n", name, vendorId, productId);
 }
 
 static void device_removed(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef device)
@@ -81,7 +116,7 @@ CFMutableDictionaryRef create_device_matching_dictionary(UInt32 usage_page, UInt
     return dictionary;
 }
 
-static void* thread_func(void* argument)
+static void thread_func(void* argument)
 {
     InputIOKit* input_io_kit = (InputIOKit*)argument;
 
@@ -95,8 +130,6 @@ static void* thread_func(void* argument)
     mutex_unlock(&input_io_kit->start_mutex);
 
     CFRunLoopRun();
-
-    return NULL;
 }
 
 int input_init(Input* input)
@@ -109,13 +142,14 @@ int input_init(Input* input)
     condition_init(&input_io_kit->start_condition);
     mutex_init(&input_io_kit->start_mutex);
 
+    CFMutableDictionaryRef keyboard = create_device_matching_dictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Keyboard);
     CFMutableDictionaryRef joystick = create_device_matching_dictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
     CFMutableDictionaryRef gamepad = create_device_matching_dictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);
     CFMutableDictionaryRef multi_axis_controller = create_device_matching_dictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_MultiAxisController);
 
-    CFMutableDictionaryRef matches_list[] = {joystick, gamepad, multi_axis_controller};
+    CFMutableDictionaryRef matches_list[] = {keyboard, joystick, gamepad, multi_axis_controller};
 
-    CFArrayRef criteria = CFArrayCreate(kCFAllocatorDefault, (const void**)matches_list, 3, NULL);
+    CFArrayRef criteria = CFArrayCreate(kCFAllocatorDefault, (const void**)matches_list, 4, NULL);
 
     IOHIDManagerSetDeviceMatchingMultiple(input_io_kit->hid_manager, criteria);
 
@@ -159,4 +193,9 @@ int input_destroy(Input* input)
     }
 
     return 1;
+}
+
+int wait_key(Input* input, uint32_t* usage)
+{
+    return 0;
 }

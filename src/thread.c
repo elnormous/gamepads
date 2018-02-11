@@ -2,15 +2,47 @@
 //  gamepads
 //
 
+#include <stdlib.h>
 #include "thread.h"
 
-int thread_init(Thread* thread, void*(*function)(void*), void* argument)
+typedef struct Function
 {
+    void(*function)(void*);
+    void* argument;
+} Function;
+
 #if defined(_MSC_VER)
-    thread->handle = CreateThread(NULL, 0, function, argument, 0, NULL);
+static DWORD WINAPI thread_function(LPVOID parameter)
+#else
+static void* thread_function(void* parameter)
+#endif
+{
+    Function* func = (Function*)parameter;
+    void(*function)(void*) = func->function;
+    void* argument = func->argument;
+
+    free(func);
+
+    function(argument);
+
+#if defined(_MSC_VER)
+    return 0;
+#else
+    return NULL;
+#endif
+}
+
+int thread_init(Thread* thread, void(*function)(void*), void* argument)
+{
+    Function* func = malloc(sizeof(Function));
+    func->function = function;
+    func->argument = argument;
+
+#if defined(_MSC_VER)
+    thread->handle = CreateThread(NULL, 0, thread_function, func, 0, NULL);
     return thread->handle != NULL;
 #else
-    return pthread_create(&thread->thread, NULL, function, argument) == 0;
+    return pthread_create(&thread->thread, NULL, thread_function, func) == 0;
 #endif
 }
 

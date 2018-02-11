@@ -38,7 +38,7 @@ typedef struct Condition
 #endif
 } Condition;
 
-int thread_init(Thread* thread, void*(*function)(void*), void* argument);
+int thread_init(Thread* thread, void(*function)(void*), void* argument);
 int thread_destroy(Thread* thread);
 int thread_join(Thread* thread);
 int mutex_init(Mutex* mutex);
