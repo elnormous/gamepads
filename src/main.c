@@ -29,5 +29,9 @@ int main(int argc, const char * argv[])
 
     // TODO: port to Linux
 
+    for (;;)
+    {
+    }
+
     return EXIT_SUCCESS;
 }
