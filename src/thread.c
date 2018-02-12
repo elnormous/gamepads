@@ -114,6 +114,15 @@ int mutex_lock(Mutex* mutex)
 #endif
 }
 
+int mutex_try_lock(Mutex* mutex)
+{
+#if defined(_MSC_VER)
+    return TryEnterCriticalSection(&mutex->critical_section) != 0;
+#else
+    return pthread_mutex_trylock(&mutex->mutex) == 0;
+#endif
+}
+
 int mutex_unlock(Mutex* mutex)
 {
 #if defined(_MSC_VER)

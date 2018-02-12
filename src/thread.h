@@ -47,6 +47,7 @@ int thread_join(Thread* thread);
 int mutex_init(Mutex* mutex);
 int mutex_destroy(Mutex* mutex);
 int mutex_lock(Mutex* mutex);
+int mutex_try_lock(Mutex* mutex);
 int mutex_unlock(Mutex* mutex);
 int condition_init(Condition* condition);
 int condition_destroy(Condition* condition);
