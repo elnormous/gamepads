@@ -6,30 +6,19 @@
 #include <string.h>
 #include "thread.h"
 
-typedef struct Parameters
-{
-    void(*function)(void*);
-    void* argument;
-    const char* name;
-} Parameters;
-
 #if defined(_MSC_VER)
 static DWORD WINAPI thread_function(LPVOID parameter)
 #else
 static void* thread_function(void* parameter)
 #endif
 {
-    Parameters* parameters = (Parameters*)parameter;
-    void(*function)(void*) = parameters->function;
-    void* argument = parameters->argument;
+    Thread* thread = (Thread*)parameter;
 
 #ifdef __APPLE__
-    if (parameters->name) pthread_setname_np(parameters->name);
+    if (thread->name) pthread_setname_np(thread->name);
 #endif
 
-    free(parameters);
-
-    function(argument);
+    thread->function(thread->argument);
 
 #if defined(_MSC_VER)
     return 0;
@@ -40,10 +29,9 @@ static void* thread_function(void* parameter)
 
 int thread_init(Thread* thread, void(*function)(void*), void* argument, const char* name)
 {
-    Parameters* parameters = malloc(sizeof(Parameters));
-    parameters->function = function;
-    parameters->argument = argument;
-    parameters->name = name;
+    thread->function = function;
+    thread->argument = argument;
+    thread->name = name;
 
 #if defined(_MSC_VER)
     DWORD thread_id;
@@ -69,7 +57,7 @@ int thread_init(Thread* thread, void(*function)(void*), void* argument, const ch
 
     return 1;
 #else
-    if (pthread_create(&thread->thread, NULL, thread_function, parameters) != 0) return 0;
+    if (pthread_create(&thread->thread, NULL, thread_function, thread) != 0) return 0;
 
 #ifndef __APPLE__
     if (name) pthread_setname_np(thread->thread, name);
