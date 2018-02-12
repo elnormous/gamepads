@@ -55,4 +55,4 @@ int gpConditionSignal(Condition* condition);
 int gpConditionBroadcast(Condition* condition);
 int gpConditionWait(Condition* condition, Mutex* mutex);
 int gpConditionTimedWait(Condition* condition, Mutex* mutex, uint64_t ns);
-int gpInterlockedCompareAndSwap(int32_t old_value, int32_t new_value, int32_t* value);
+int gpInterlockedCompareAndSwap(int32_t oldValue, int32_t newValue, int32_t* value);

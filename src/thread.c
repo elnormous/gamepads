@@ -199,11 +199,11 @@ int gpConditionTimedWait(Condition* condition, Mutex* mutex, uint64_t ns)
 #endif
 }
 
-int gpInterlockedCompareAndSwap(int32_t old_value, int32_t new_value, int32_t* value)
+int gpInterlockedCompareAndSwap(int32_t oldValue, int32_t newValue, int32_t* value)
 {
 #if defined(_MSC_VER)
-    return InterlockedCompareExchange(value, new_value, old_value);
+    return InterlockedCompareExchange(value, newValue, oldValue);
 #else
-    return __sync_val_compare_and_swap(value, old_value, new_value);
+    return __sync_val_compare_and_swap(value, oldValue, newValue);
 #endif
 }
