@@ -6,11 +6,12 @@
 #include <string.h>
 #include "thread.h"
 
-typedef struct Function
+typedef struct Parameters
 {
     void(*function)(void*);
     void* argument;
-} Function;
+    const char* name;
+} Parameters;
 
 #if defined(_MSC_VER)
 static DWORD WINAPI thread_function(LPVOID parameter)
@@ -18,11 +19,15 @@ static DWORD WINAPI thread_function(LPVOID parameter)
 static void* thread_function(void* parameter)
 #endif
 {
-    Function* func = (Function*)parameter;
-    void(*function)(void*) = func->function;
-    void* argument = func->argument;
+    Parameters* parameters = (Parameters*)parameter;
+    void(*function)(void*) = parameters->function;
+    void* argument = parameters->argument;
 
-    free(func);
+#ifdef __APPLE__
+    if (parameters->name) pthread_setname_np(parameters->name);
+#endif
+
+    free(parameters);
 
     function(argument);
 
@@ -33,17 +38,44 @@ static void* thread_function(void* parameter)
 #endif
 }
 
-int thread_init(Thread* thread, void(*function)(void*), void* argument)
+int thread_init(Thread* thread, void(*function)(void*), void* argument, const char* name)
 {
-    Function* func = malloc(sizeof(Function));
-    func->function = function;
-    func->argument = argument;
+    Parameters* parameters = malloc(sizeof(Parameters));
+    parameters->function = function;
+    parameters->argument = argument;
+    parameters->name = name;
 
 #if defined(_MSC_VER)
-    thread->handle = CreateThread(NULL, 0, thread_function, func, 0, NULL);
-    return thread->handle != NULL;
+    DWORD thread_id;
+    thread->handle = CreateThread(NULL, 0, thread_function, parameters, 0, &thread_id);
+    if (thread->handle == NULL) return 0;
+
+    if (name)
+    {
+        THREADNAME_INFO info;
+        info.dwType = 0x1000;
+        info.szName = name;
+        info.dwThreadID = thread_id;
+        info.dwFlags = 0;
+
+        __try
+        {
+            RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), reinterpret_cast<ULONG_PTR*>(&info));
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+        }
+    }
+
+    return 1;
 #else
-    return pthread_create(&thread->thread, NULL, thread_function, func) == 0;
+    if (pthread_create(&thread->thread, NULL, thread_function, parameters) != 0) return 0;
+
+#ifndef __APPLE__
+    if (name) pthread_setname_np(thread->thread, name);
+#endif
+
+    return 1;
 #endif
 }
 
@@ -62,33 +94,6 @@ int thread_join(Thread* thread)
     return WaitForSingleObject(thread->handle, INFINITE) != WAIT_FAILED;
 #else
     return pthread_join(thread->thread, NULL) == 0;
-#endif
-}
-
-int thread_set_name(const char* name)
-{
-#if defined(_MSC_VER)
-    THREADNAME_INFO info;
-    info.dwType = 0x1000;
-    info.szName = name;
-    info.dwThreadID = static_cast<DWORD>(-1);
-    info.dwFlags = 0;
-
-    __try
-    {
-        RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), reinterpret_cast<ULONG_PTR*>(&info));
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER)
-    {
-    }
-
-    return 1;
-#else
-#ifdef __APPLE__
-    return pthread_setname_np(name) == 0;
-#else
-    return pthread_setname_np(pthread_self(), name) == 0;
-#endif
 #endif
 }
 

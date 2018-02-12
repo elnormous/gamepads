@@ -143,8 +143,6 @@ static void thread_func(void* argument)
 {
     InputIOKit* input_io_kit = (InputIOKit*)argument;
 
-    thread_set_name("Input");
-
     input_io_kit->run_loop = CFRunLoopGetCurrent();
 
     IOHIDManagerScheduleWithRunLoop(input_io_kit->hid_manager, input_io_kit->run_loop, kCFRunLoopDefaultMode);
@@ -192,7 +190,7 @@ int input_init(Input* input)
 
     mutex_lock(&input_io_kit->start_mutex);
 
-    thread_init(&input_io_kit->thread, thread_func, input_io_kit);
+    thread_init(&input_io_kit->thread, thread_func, input_io_kit, "Input");
 
     while (!input_io_kit->run_loop)
     {
