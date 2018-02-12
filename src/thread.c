@@ -98,6 +98,7 @@ int mutex_init(Mutex* mutex)
 int mutex_destroy(Mutex* mutex)
 {
 #if defined(_MSC_VER)
+    DeleteCriticalSection(&mutex->critical_section);
     return 1;
 #else
     return pthread_mutex_destroy(&mutex->mutex) == 0;
