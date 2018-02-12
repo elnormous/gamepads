@@ -40,6 +40,7 @@ typedef struct Condition
 
 int thread_init(Thread* thread, void(*function)(void*), void* argument);
 int thread_destroy(Thread* thread);
+int thread_set_name(const char* name);
 int thread_join(Thread* thread);
 int mutex_init(Mutex* mutex);
 int mutex_destroy(Mutex* mutex);

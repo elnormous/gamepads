@@ -34,23 +34,22 @@ int main(int argc, const char* argv[])
 
     // TODO: port to Linux
 
-
-    printf("Press bottom face button\n");
-    printf("Press left face button\n");
-    printf("Press top face button\n");
-    printf("Press right face button\n");
-    printf("Press start button\n");
-    printf("Press back button\n");
-    printf("Press left shoulder button\n");
-    printf("Press right shoulder button\n");
-    printf("Press left thumbstick\n");
-    printf("Press right thumbstick\n");
-    printf("Press left trigger\n");
-    printf("Press right trigger\n");
-    printf("Move left thumbstick to the right\n");
-    printf("Move left thumbstick to the up\n");
-    printf("Move right thumbstick to the right\n");
-    printf("Move right thumbstick to the up\n");
+    printf("Press bottom face button (escape if the gamepad doesn't have it)\n");
+    printf("Press left face button (escape if the gamepad doesn't have it)\n");
+    printf("Press top face butto (escape if the gamepad doesn't have it)n\n");
+    printf("Press right face button (escape if the gamepad doesn't have it)\n");
+    printf("Press start button (escape if the gamepad doesn't have it)\n");
+    printf("Press back button (escape if the gamepad doesn't have it)\n");
+    printf("Press left shoulder button (escape if the gamepad doesn't have it)\n");
+    printf("Press right shoulder button (escape if the gamepad doesn't have it)\n");
+    printf("Press left thumbstick (escape if the gamepad doesn't have it)\n");
+    printf("Press right thumbstick (escape if the gamepad doesn't have it)\n");
+    printf("Press left trigger (escape if the gamepad doesn't have it)\n");
+    printf("Press right trigger (escape if the gamepad doesn't have it)\n");
+    printf("Move left thumbstick to the right (escape if the gamepad doesn't have it)\n");
+    printf("Move left thumbstick to the up (escape if the gamepad doesn't have it)\n");
+    printf("Move right thumbstick to the right (escape if the gamepad doesn't have it)\n");
+    printf("Move right thumbstick to the up (escape if the gamepad doesn't have it)\n");
 
     for (;;)
     {

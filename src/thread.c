@@ -3,6 +3,7 @@
 //
 
 #include <stdlib.h>
+#include <string.h>
 #include "thread.h"
 
 typedef struct Function
@@ -61,6 +62,33 @@ int thread_join(Thread* thread)
     return WaitForSingleObject(thread->handle, INFINITE) != WAIT_FAILED;
 #else
     return pthread_join(thread->thread, NULL) == 0;
+#endif
+}
+
+int thread_set_name(const char* name)
+{
+#if defined(_MSC_VER)
+    THREADNAME_INFO info;
+    info.dwType = 0x1000;
+    info.szName = name;
+    info.dwThreadID = static_cast<DWORD>(-1);
+    info.dwFlags = 0;
+
+    __try
+    {
+        RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), reinterpret_cast<ULONG_PTR*>(&info));
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+    }
+
+    return 1;
+#else
+#ifdef __APPLE__
+    return pthread_setname_np(name) == 0;
+#else
+    return pthread_setname_np(pthread_self(), name) == 0;
+#endif
 #endif
 }
 
