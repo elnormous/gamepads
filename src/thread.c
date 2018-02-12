@@ -35,7 +35,7 @@ int thread_init(Thread* thread, void(*function)(void*), void* argument, const ch
 
 #if defined(_MSC_VER)
     DWORD thread_id;
-    thread->handle = CreateThread(NULL, 0, thread_function, parameters, 0, &thread_id);
+    thread->handle = CreateThread(NULL, 0, thread_function, thread, 0, &thread_id);
     if (thread->handle == NULL) return 0;
 
     if (name)
