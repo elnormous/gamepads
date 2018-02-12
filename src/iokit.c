@@ -15,11 +15,38 @@ typedef struct InputIOKit
     Mutex start_mutex;
 } InputIOKit;
 
+typedef struct DeviceIOKit
+{
+    int is_keyboard;
+    int is_gamepad;
+} DeviceIOKit;
+
+static void device_input(void* ctx, IOReturn result, void* sender, IOHIDValueRef value)
+{
+    IOHIDElementRef element_ref = IOHIDValueGetElement(value);
+    IOHIDElementType type = IOHIDElementGetType(element_ref);
+    uint32_t usage_page = IOHIDElementGetUsagePage(element_ref);
+    uint32_t usage = IOHIDElementGetUsage(element_ref);
+    CFIndex new_value = IOHIDValueGetIntegerValue(value);
+
+    if (usage_page == kHIDPage_KeyboardOrKeypad &&
+        type == kIOHIDElementTypeInput_Button)
+    {
+        if (usage == kHIDUsage_KeyboardEscape)
+        {
+            printf("Escape %s\n", new_value ? "down" : "up");
+        }
+    }
+}
+
 static void device_added(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef device)
 {
     int32_t vendorId = 0;
     int32_t productId = 0;
     char name[256] = "";
+    DeviceIOKit* io_kit_device = malloc(sizeof(DeviceIOKit));
+
+    memset(io_kit_device, 0, sizeof(DeviceIOKit));
 
     CFArrayRef usages = (CFArrayRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDDeviceUsagePairsKey));
 
@@ -27,7 +54,7 @@ static void device_added(void* ctx, IOReturn result, void* sender, IOHIDDeviceRe
     {
         int32_t usage;
         CFIndex i;
-        int isKeyboard = 0, isGamepad = 0;
+
         CFIndex count = CFArrayGetCount(usages);
 
         for (i = 0; i < count; ++i)
@@ -40,21 +67,17 @@ static void device_added(void* ctx, IOReturn result, void* sender, IOHIDDeviceRe
             {
                 CFNumberGetValue(usageNumber, kCFNumberSInt32Type, &usage);
 
-                isKeyboard = (usage == kHIDUsage_GD_Keyboard);
-                isGamepad = (usage == kHIDUsage_GD_Joystick ||
-                             usage == kHIDUsage_GD_GamePad ||
-                             usage == kHIDUsage_GD_MultiAxisController);
+                io_kit_device->is_keyboard = (usage == kHIDUsage_GD_Keyboard);
+                io_kit_device->is_gamepad = (usage == kHIDUsage_GD_Joystick ||
+                                             usage == kHIDUsage_GD_GamePad ||
+                                             usage == kHIDUsage_GD_MultiAxisController);
             }
         }
 
-        if (isKeyboard)
-        {
-            printf("Keyboard\n");
-        }
-        else if (isGamepad)
-        {
-            printf("Gamepad\n");
+        IOHIDDeviceRegisterInputValueCallback(device, device_input, io_kit_device);
 
+        if (io_kit_device->is_gamepad)
+        {
             CFNumberRef vendor = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDVendorIDKey));
             if (vendor)
             {
