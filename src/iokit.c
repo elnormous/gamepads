@@ -8,45 +8,45 @@
 
 typedef struct InputIOKit
 {
-    IOHIDManagerRef hid_manager;
+    IOHIDManagerRef hidManager;
     Thread thread;
-    CFRunLoopRef run_loop;
-    Condition start_condition;
-    Mutex start_mutex;
+    CFRunLoopRef runLoop;
+    Condition startCondition;
+    Mutex startMutex;
 } InputIOKit;
 
 typedef struct DeviceIOKit
 {
-    int is_keyboard;
-    int is_gamepad;
+    int isKeyboard;
+    int isGamepad;
 } DeviceIOKit;
 
-static void device_input(void* ctx, IOReturn result, void* sender, IOHIDValueRef value)
+static void deviceInput(void* ctx, IOReturn result, void* sender, IOHIDValueRef value)
 {
-    IOHIDElementRef element_ref = IOHIDValueGetElement(value);
-    IOHIDElementType type = IOHIDElementGetType(element_ref);
-    uint32_t usage_page = IOHIDElementGetUsagePage(element_ref);
-    uint32_t usage = IOHIDElementGetUsage(element_ref);
-    CFIndex new_value = IOHIDValueGetIntegerValue(value);
+    IOHIDElementRef elementRef = IOHIDValueGetElement(value);
+    IOHIDElementType type = IOHIDElementGetType(elementRef);
+    uint32_t usagePage = IOHIDElementGetUsagePage(elementRef);
+    uint32_t usage = IOHIDElementGetUsage(elementRef);
+    CFIndex newValue = IOHIDValueGetIntegerValue(value);
 
-    if (usage_page == kHIDPage_KeyboardOrKeypad &&
+    if (usagePage == kHIDPage_KeyboardOrKeypad &&
         type == kIOHIDElementTypeInput_Button)
     {
         if (usage == kHIDUsage_KeyboardEscape)
         {
-            printf("Escape %s\n", new_value ? "down" : "up");
+            printf("Escape %s\n", newValue ? "down" : "up");
         }
     }
 }
 
-static void device_added(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef device)
+static void deviceAdded(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef device)
 {
     int32_t vendorId = 0;
     int32_t productId = 0;
     char name[256] = "";
-    DeviceIOKit* io_kit_device = malloc(sizeof(DeviceIOKit));
+    DeviceIOKit* deviceIOKit = malloc(sizeof(DeviceIOKit));
 
-    memset(io_kit_device, 0, sizeof(DeviceIOKit));
+    memset(deviceIOKit, 0, sizeof(DeviceIOKit));
 
     CFArrayRef usages = (CFArrayRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDDeviceUsagePairsKey));
 
@@ -67,16 +67,16 @@ static void device_added(void* ctx, IOReturn result, void* sender, IOHIDDeviceRe
             {
                 CFNumberGetValue(usageNumber, kCFNumberSInt32Type, &usage);
 
-                io_kit_device->is_keyboard = (usage == kHIDUsage_GD_Keyboard);
-                io_kit_device->is_gamepad = (usage == kHIDUsage_GD_Joystick ||
-                                             usage == kHIDUsage_GD_GamePad ||
-                                             usage == kHIDUsage_GD_MultiAxisController);
+                deviceIOKit->isKeyboard = (usage == kHIDUsage_GD_Keyboard);
+                deviceIOKit->isGamepad = (usage == kHIDUsage_GD_Joystick ||
+                                          usage == kHIDUsage_GD_GamePad ||
+                                          usage == kHIDUsage_GD_MultiAxisController);
             }
         }
 
-        IOHIDDeviceRegisterInputValueCallback(device, device_input, io_kit_device);
+        IOHIDDeviceRegisterInputValueCallback(device, deviceInput, deviceIOKit);
 
-        if (io_kit_device->is_gamepad)
+        if (deviceIOKit->isGamepad)
         {
             CFNumberRef vendor = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDVendorIDKey));
             if (vendor)
@@ -102,12 +102,12 @@ static void device_added(void* ctx, IOReturn result, void* sender, IOHIDDeviceRe
     }
 }
 
-static void device_removed(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef device)
+static void deviceRemoved(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef device)
 {
     fprintf(stdout, "Device removed\n");
 }
 
-CFMutableDictionaryRef create_device_matching_dictionary(UInt32 usage_page, UInt32 usage)
+static CFMutableDictionaryRef createDeviceMatchingDictionary(UInt32 usage_page, UInt32 usage)
 {
     CFMutableDictionaryRef dictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
                                                                   &kCFTypeDictionaryKeyCallBacks,
@@ -115,110 +115,110 @@ CFMutableDictionaryRef create_device_matching_dictionary(UInt32 usage_page, UInt
     if (!dictionary)
         return NULL;
 
-    CFNumberRef page_number = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &usage_page);
-    if (!page_number)
+    CFNumberRef pageNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &usage_page);
+    if (!pageNumber)
     {
         CFRelease(dictionary);
         return NULL;
     }
 
-    CFDictionarySetValue(dictionary, CFSTR(kIOHIDDeviceUsagePageKey), page_number);
-    CFRelease(page_number);
+    CFDictionarySetValue(dictionary, CFSTR(kIOHIDDeviceUsagePageKey), pageNumber);
+    CFRelease(pageNumber);
 
-    CFNumberRef usage_number = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &usage);
+    CFNumberRef usageNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &usage);
 
-    if (!usage_number)
+    if (!usageNumber)
     {
         CFRelease(dictionary);
         return NULL;
     }
 
-    CFDictionarySetValue(dictionary, CFSTR(kIOHIDDeviceUsageKey), usage_number);
-    CFRelease(usage_number);
+    CFDictionarySetValue(dictionary, CFSTR(kIOHIDDeviceUsageKey), usageNumber);
+    CFRelease(usageNumber);
 
     return dictionary;
 }
 
-static void thread_func(void* argument)
+static void threadFunc(void* argument)
 {
-    InputIOKit* input_io_kit = (InputIOKit*)argument;
+    InputIOKit* inputIOKit = (InputIOKit*)argument;
 
-    input_io_kit->run_loop = CFRunLoopGetCurrent();
+    inputIOKit->runLoop = CFRunLoopGetCurrent();
 
-    IOHIDManagerScheduleWithRunLoop(input_io_kit->hid_manager, input_io_kit->run_loop, kCFRunLoopDefaultMode);
+    IOHIDManagerScheduleWithRunLoop(inputIOKit->hidManager, inputIOKit->runLoop, kCFRunLoopDefaultMode);
 
     // signal that the thread has started
-    mutex_lock(&input_io_kit->start_mutex);
-    condition_broadcast(&input_io_kit->start_condition);
-    mutex_unlock(&input_io_kit->start_mutex);
+    gpMutexLock(&inputIOKit->startMutex);
+    gpConditionBroadcast(&inputIOKit->startCondition);
+    gpMutexUnlock(&inputIOKit->startMutex);
 
     CFRunLoopRun();
 }
 
-int input_init(Input* input)
+int gpInputInit(Input* input)
 {
-    InputIOKit* input_io_kit = malloc(sizeof(InputIOKit));
-    input->opaque = input_io_kit;
+    InputIOKit* inputIOKit = malloc(sizeof(InputIOKit));
+    input->opaque = inputIOKit;
 
-    input_io_kit->hid_manager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
-    input_io_kit->run_loop = NULL;
-    condition_init(&input_io_kit->start_condition);
-    mutex_init(&input_io_kit->start_mutex);
+    inputIOKit->hidManager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
+    inputIOKit->runLoop = NULL;
+    gpConditionInit(&inputIOKit->startCondition);
+    gpMutexInit(&inputIOKit->startMutex);
 
-    CFMutableDictionaryRef keyboard = create_device_matching_dictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Keyboard);
-    CFMutableDictionaryRef joystick = create_device_matching_dictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
-    CFMutableDictionaryRef gamepad = create_device_matching_dictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);
-    CFMutableDictionaryRef multi_axis_controller = create_device_matching_dictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_MultiAxisController);
+    CFMutableDictionaryRef keyboard = createDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Keyboard);
+    CFMutableDictionaryRef joystick = createDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
+    CFMutableDictionaryRef gamepad = createDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);
+    CFMutableDictionaryRef multiAxisController = createDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_MultiAxisController);
 
-    CFMutableDictionaryRef matches_list[] = {keyboard, joystick, gamepad, multi_axis_controller};
+    CFMutableDictionaryRef matchesList[] = {keyboard, joystick, gamepad, multiAxisController};
 
-    CFArrayRef criteria = CFArrayCreate(kCFAllocatorDefault, (const void**)matches_list, 4, NULL);
+    CFArrayRef criteria = CFArrayCreate(kCFAllocatorDefault, (const void**)matchesList, 4, NULL);
 
-    IOHIDManagerSetDeviceMatchingMultiple(input_io_kit->hid_manager, criteria);
+    IOHIDManagerSetDeviceMatchingMultiple(inputIOKit->hidManager, criteria);
 
     CFRelease(criteria);
 
-    IOReturn ret = IOHIDManagerOpen(input_io_kit->hid_manager, kIOHIDOptionsTypeNone);
+    IOReturn ret = IOHIDManagerOpen(inputIOKit->hidManager, kIOHIDOptionsTypeNone);
     if (ret != kIOReturnSuccess)
     {
         fprintf(stderr, "Failed to initialize manager, error: %d\n", ret);
         return 0;
     }
 
-    IOHIDManagerRegisterDeviceMatchingCallback(input_io_kit->hid_manager, device_added, input_io_kit);
-    IOHIDManagerRegisterDeviceRemovalCallback(input_io_kit->hid_manager, device_removed, input_io_kit);
+    IOHIDManagerRegisterDeviceMatchingCallback(inputIOKit->hidManager, deviceAdded, inputIOKit);
+    IOHIDManagerRegisterDeviceRemovalCallback(inputIOKit->hidManager, deviceRemoved, inputIOKit);
 
-    mutex_lock(&input_io_kit->start_mutex);
+    gpMutexLock(&inputIOKit->startMutex);
 
-    thread_init(&input_io_kit->thread, thread_func, input_io_kit, "Input");
+    gpThreadInit(&inputIOKit->thread, threadFunc, inputIOKit, "Input");
 
-    while (!input_io_kit->run_loop)
+    while (!inputIOKit->runLoop)
     {
-        condition_wait(&input_io_kit->start_condition, &input_io_kit->start_mutex);
+        gpConditionWait(&inputIOKit->startCondition, &inputIOKit->startMutex);
     }
 
-    mutex_unlock(&input_io_kit->start_mutex);
+    gpMutexUnlock(&inputIOKit->startMutex);
 
     return 1;
 }
 
-int input_destroy(Input* input)
+int gpInputDestroy(Input* input)
 {
     if (input->opaque)
     {
-        InputIOKit* input_io_kit = (InputIOKit*)input->opaque;
+        InputIOKit* inputIOKit = (InputIOKit*)input->opaque;
 
-        if (input_io_kit->run_loop) CFRunLoopStop(input_io_kit->run_loop);
+        if (inputIOKit->runLoop) CFRunLoopStop(inputIOKit->runLoop);
 
-        thread_join(&input_io_kit->thread);
+        gpThreadJoin(&inputIOKit->thread);
 
-        free(input_io_kit);
+        free(inputIOKit);
     }
 
     return 1;
 }
 
-int wait_key(Input* input, uint32_t* usage)
+int gpInputWaitKey(Input* input, uint32_t* usage)
 {
     return 0;
 }

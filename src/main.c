@@ -22,7 +22,7 @@ int main(int argc, const char* argv[])
         }
     }
 
-    input_init(&input);
+    gpInputInit(&input);
 
     // TODO: print buttons and collect info
 

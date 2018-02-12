@@ -14,6 +14,6 @@ typedef struct Gamepad
     void* opaque;
 } Gamepad;
 
-int input_init(Input* input);
-int input_destroy(Input* input);
-int wait_key(Input* input, uint32_t* usage);
+int gpInputInit(Input* input);
+int gpInputDestroy(Input* input);
+int gpInputWaitKey(Input* input, uint32_t* usage);

@@ -7,9 +7,9 @@
 #include "thread.h"
 
 #if defined(_MSC_VER)
-static DWORD WINAPI thread_function(LPVOID parameter)
+static DWORD WINAPI threadFunction(LPVOID parameter)
 #else
-static void* thread_function(void* parameter)
+static void* threadFunction(void* parameter)
 #endif
 {
     Thread* thread = (Thread*)parameter;
@@ -27,15 +27,15 @@ static void* thread_function(void* parameter)
 #endif
 }
 
-int thread_init(Thread* thread, void(*function)(void*), void* argument, const char* name)
+int gpThreadInit(Thread* thread, void(*function)(void*), void* argument, const char* name)
 {
     thread->function = function;
     thread->argument = argument;
     thread->name = name;
 
 #if defined(_MSC_VER)
-    DWORD thread_id;
-    thread->handle = CreateThread(NULL, 0, thread_function, thread, 0, &thread_id);
+    DWORD threadId;
+    thread->handle = CreateThread(NULL, 0, threadFunction, thread, 0, &threadId);
     if (thread->handle == NULL) return 0;
 
     if (name)
@@ -43,7 +43,7 @@ int thread_init(Thread* thread, void(*function)(void*), void* argument, const ch
         THREADNAME_INFO info;
         info.dwType = 0x1000;
         info.szName = name;
-        info.dwThreadID = thread_id;
+        info.dwThreadID = threadId;
         info.dwFlags = 0;
 
         __try
@@ -57,7 +57,7 @@ int thread_init(Thread* thread, void(*function)(void*), void* argument, const ch
 
     return 1;
 #else
-    if (pthread_create(&thread->thread, NULL, thread_function, thread) != 0) return 0;
+    if (pthread_create(&thread->thread, NULL, threadFunction, thread) != 0) return 0;
 
 #ifndef __APPLE__
     if (name) pthread_setname_np(thread->thread, name);
@@ -67,7 +67,7 @@ int thread_init(Thread* thread, void(*function)(void*), void* argument, const ch
 #endif
 }
 
-int thread_destroy(Thread* thread)
+int gpThreadDestroy(Thread* thread)
 {
 #if defined(_MSC_VER)
     return CloseHandle(thread->handle);
@@ -76,7 +76,7 @@ int thread_destroy(Thread* thread)
 #endif
 }
 
-int thread_join(Thread* thread)
+int gpThreadJoin(Thread* thread)
 {
 #if defined(_MSC_VER)
     return WaitForSingleObject(thread->handle, INFINITE) != WAIT_FAILED;
@@ -85,66 +85,66 @@ int thread_join(Thread* thread)
 #endif
 }
 
-int mutex_init(Mutex* mutex)
+int gpMutexInit(Mutex* mutex)
 {
 #if defined(_MSC_VER)
-    InitializeCriticalSection(&mutex->critical_section);
+    InitializeCriticalSection(&mutex->criticalSection);
     return 1;
 #else
     return pthread_mutex_init(&mutex->mutex, NULL) == 0;
 #endif
 }
 
-int mutex_destroy(Mutex* mutex)
+int gpMutexDestroy(Mutex* mutex)
 {
 #if defined(_MSC_VER)
-    DeleteCriticalSection(&mutex->critical_section);
+    DeleteCriticalSection(&mutex->criticalSection);
     return 1;
 #else
     return pthread_mutex_destroy(&mutex->mutex) == 0;
 #endif
 }
 
-int mutex_lock(Mutex* mutex)
+int gpMutexLock(Mutex* mutex)
 {
 #if defined(_MSC_VER)
-    EnterCriticalSection(&mutex->critical_section);
+    EnterCriticalSection(&mutex->criticalSection);
     return 1;
 #else
     return pthread_mutex_lock(&mutex->mutex) == 0;
 #endif
 }
 
-int mutex_try_lock(Mutex* mutex)
+int gpMutexTryLock(Mutex* mutex)
 {
 #if defined(_MSC_VER)
-    return TryEnterCriticalSection(&mutex->critical_section) != 0;
+    return TryEnterCriticalSection(&mutex->criticalSection) != 0;
 #else
     return pthread_mutex_trylock(&mutex->mutex) == 0;
 #endif
 }
 
-int mutex_unlock(Mutex* mutex)
+int gpMutexUnlock(Mutex* mutex)
 {
 #if defined(_MSC_VER)
-    LeaveCriticalSection(&mutex->critical_section);
+    LeaveCriticalSection(&mutex->criticalSection);
     return 1;
 #else
     return pthread_mutex_unlock(&mutex->mutex) == 0;
 #endif
 }
 
-int condition_init(Condition* condition)
+int gpConditionInit(Condition* condition)
 {
 #if defined(_MSC_VER)
-    InitializeConditionVariable(&condition->condition_variable);
+    InitializeConditionVariable(&condition->conditionVariable);
     return 1;
 #else
     return pthread_cond_init(&condition->condition, NULL) == 0;
 #endif
 }
 
-int condition_destroy(Condition* condition)
+int gpConditionDestroy(Condition* condition)
 {
 #if defined(_MSC_VER)
     return 1;
@@ -153,39 +153,39 @@ int condition_destroy(Condition* condition)
 #endif
 }
 
-int condition_signal(Condition* condition)
+int gpConditionSignal(Condition* condition)
 {
 #if defined(_MSC_VER)
-    WakeConditionVariable(&condition->condition_variable);
+    WakeConditionVariable(&condition->conditionVariable);
     return 1;
 #else
     return pthread_cond_signal(&condition->condition) == 0;
 #endif
 }
 
-int condition_broadcast(Condition* condition)
+int gpConditionBroadcast(Condition* condition)
 {
 #if defined(_MSC_VER)
-    WakeAllConditionVariable(&condition->condition_variable);
+    WakeAllConditionVariable(&condition->conditionVariable);
     return 1;
 #else
     return pthread_cond_broadcast(&condition->condition) == 0;
 #endif
 }
 
-int condition_wait(Condition* condition, Mutex* mutex)
+int gpConditionWait(Condition* condition, Mutex* mutex)
 {
 #if defined(_MSC_VER)
-    return SleepConditionVariableCS(&condition->condition_variable, &mutex->critical_section, INFINITE);
+    return SleepConditionVariableCS(&condition->conditionVariable, &mutex->criticalSection, INFINITE);
 #else
     return pthread_cond_wait(&condition->condition, &mutex->mutex) == 0;
 #endif
 }
 
-int condition_timedwait(Condition* condition, Mutex* mutex, uint64_t ns)
+int gpConditionTimedWait(Condition* condition, Mutex* mutex, uint64_t ns)
 {
 #if defined(_MSC_VER)
-    return SleepConditionVariableCS(&condition->condition_variable, &mutex->critical_section, (DWORD)(ns / 1000000));
+    return SleepConditionVariableCS(&condition->conditionVariable, &mutex->criticalSection, (DWORD)(ns / 1000000));
 #else
     static const uint64_t NSEC_PER_SEC = 1000000000L;
     struct timespec ts;
@@ -199,7 +199,7 @@ int condition_timedwait(Condition* condition, Mutex* mutex, uint64_t ns)
 #endif
 }
 
-int interlocked_compare_and_swap(int32_t old_value, int32_t new_value, int32_t* value)
+int gpInterlockedCompareAndSwap(int32_t old_value, int32_t new_value, int32_t* value)
 {
 #if defined(_MSC_VER)
     return InterlockedCompareExchange(value, new_value, old_value);
