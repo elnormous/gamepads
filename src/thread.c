@@ -4,6 +4,10 @@
 
 #include <stdlib.h>
 #include <string.h>
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
 #include "thread.h"
 
 #if defined(_MSC_VER)
@@ -187,13 +191,25 @@ int gpConditionTimedWait(Condition* condition, Mutex* mutex, uint64_t ns)
 #if defined(_MSC_VER)
     return SleepConditionVariableCS(&condition->conditionVariable, &mutex->criticalSection, (DWORD)(ns / 1000000));
 #else
-    static const uint64_t NSEC_PER_SEC = 1000000000L;
+    static const long NANOSEC_PER_SEC = 1000000000L;
     struct timespec ts;
+
+#ifdef __MACH__ // OS X does not have clock_gettime, use clock_get_time
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    ts.tv_sec = mts.tv_sec;
+    ts.tv_nsec = mts.tv_nsec;
+#else
     clock_gettime(CLOCK_REALTIME, &ts);
+#endif
+
     ts.tv_nsec += ns;
 
-    ts.tv_sec += (int32_t)(ts.tv_nsec / NSEC_PER_SEC);
-    ts.tv_nsec %= NSEC_PER_SEC;
+    ts.tv_sec += (int32_t)(ts.tv_nsec / NANOSEC_PER_SEC);
+    ts.tv_nsec %= NANOSEC_PER_SEC;
 
     return pthread_cond_timedwait(&condition->condition, &mutex->mutex, &ts) == 0;
 #endif
