@@ -37,8 +37,7 @@ int gpThreadInit(Thread* thread, void(*function)(void*), void* argument, const c
     thread->name = name;
 
 #if defined(_MSC_VER)
-    DWORD threadId;
-    thread->handle = CreateThread(NULL, 0, threadFunction, thread, 0, &threadId);
+    thread->handle = CreateThread(NULL, 0, threadFunction, thread, 0, &thread->threadId);
     if (thread->handle == NULL) return 0;
 
     if (name)
@@ -46,7 +45,7 @@ int gpThreadInit(Thread* thread, void(*function)(void*), void* argument, const c
         THREADNAME_INFO info;
         info.dwType = 0x1000;
         info.szName = name;
-        info.dwThreadID = threadId;
+        info.dwThreadID = thread->threadId;
         info.dwFlags = 0;
 
         __try

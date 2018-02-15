@@ -18,6 +18,7 @@ typedef struct Thread
     const char* name;
 #if defined(_MSC_VER)
     HANDLE handle;
+    DWORD threadId;
 #else
     pthread_t thread;
 #endif
