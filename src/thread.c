@@ -178,7 +178,7 @@ int gpConditionBroadcast(Condition* condition)
 int gpConditionWait(Condition* condition, Mutex* mutex)
 {
 #if defined(_MSC_VER)
-    return SleepConditionVariableCS(&condition->conditionVariable, &mutex->criticalSection, INFINITE);
+    return SleepConditionVariableCS(&condition->conditionVariable, &mutex->criticalSection, INFINITE) != 0;
 #else
     return pthread_cond_wait(&condition->condition, &mutex->mutex) == 0;
 #endif
@@ -187,7 +187,7 @@ int gpConditionWait(Condition* condition, Mutex* mutex)
 int gpConditionTimedWait(Condition* condition, Mutex* mutex, uint64_t ns)
 {
 #if defined(_MSC_VER)
-    return SleepConditionVariableCS(&condition->conditionVariable, &mutex->criticalSection, (DWORD)(ns / 1000000));
+    return SleepConditionVariableCS(&condition->conditionVariable, &mutex->criticalSection, (DWORD)(ns / 1000000)) != 0;
 #else
     static const long NANOSEC_PER_SEC = 1000000000L;
     struct timespec ts;
