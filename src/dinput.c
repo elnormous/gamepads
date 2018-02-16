@@ -2,4 +2,9 @@
 //  gamepads
 //
 
-#include "dinput.h"
+#include "input.h"
+
+int gpInputInit(Input* input)
+{
+    return 1;
+}

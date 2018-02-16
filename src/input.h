@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <stdint.h>
+
 typedef struct Input
 {
     void* opaque;
