@@ -10,7 +10,7 @@
 #include "thread.h"
 
 #if defined(_MSC_VER)
-const DWORD MS_VC_EXCEPTION = 0x406D1388;
+static const DWORD MS_VC_EXCEPTION = 0x406D1388;
 #pragma pack(push,8)
 typedef struct tagTHREADNAME_INFO
 {
