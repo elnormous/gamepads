@@ -29,6 +29,7 @@ Some of the developers have more than one ID
 
 | Name | Vendor ID | Product ID | Configuration |
 | - | - | - | - |
+| Acme GA07 | 0x0079 | 0x0006 | 6 |
 | Afterglow Gamepad for Xbox 360 | 0x0E6F | 0x0113 | 4 |
 | Afterglow Gamepad for Xbox 360 | 0x0E6F | 0x0213 | 4 |
 | Afterglow Gamepad for Xbox 360 | 0x1BAD | 0xF900 | 4 |
@@ -230,3 +231,24 @@ Some of the developers have more than one ID
 | Right thumb X | Z |
 | Right thumb Y | RZ |
 | Right trigger | RY |
+
+## Configuration 6
+
+| Button/Axis | Usage |
+| - | - |
+| Face top | 0 |
+| Face right | 1 |
+| Face bottom | 2 |
+| Face left | 3 |
+| Left shoulder | 4 |
+| Right shoulder | 5 |
+| Left trigger | 6 |
+| Right trigger | 7 |
+| Back | 8 |
+| Start | 9 |
+| Left thumb | 10 |
+| Right thumb | 11 |
+| Left thumb X | X |
+| Left thumb Y | Y |
+| Right thumb X | Z |
+| Right thumb Y | RZ |
