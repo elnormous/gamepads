@@ -250,5 +250,5 @@ Some of the developers have more than one ID
 | Right thumb | 11 |
 | Left thumb X | X |
 | Left thumb Y | Y |
-| Right thumb X | Z |
-| Right thumb Y | RZ |
+| Right thumb X | RX |
+| Right thumb Y | RY |
