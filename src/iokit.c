@@ -4,15 +4,11 @@
 
 #import <IOKit/hid/IOHIDManager.h>
 #include "input.h"
-#include "thread.h"
 
 typedef struct InputIOKit
 {
     IOHIDManagerRef hidManager;
-    Thread thread;
     CFRunLoopRef runLoop;
-    Condition startCondition;
-    Mutex startMutex;
 } InputIOKit;
 
 typedef struct DeviceIOKit
@@ -139,12 +135,23 @@ static CFMutableDictionaryRef createDeviceMatchingDictionary(UInt32 usage_page, 
     return dictionary;
 }
 
-static void threadFunc(void* argument)
+int gpInputInit(Input* input)
 {
-    InputIOKit* inputIOKit = (InputIOKit*)argument;
+    InputIOKit* inputIOKit = malloc(sizeof(InputIOKit));
+    input->opaque = inputIOKit;
 
     inputIOKit->hidManager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
     inputIOKit->runLoop = NULL;
+
+    IOReturn ret = IOHIDManagerOpen(inputIOKit->hidManager, kIOHIDOptionsTypeNone);
+    if (ret != kIOReturnSuccess)
+    {
+        fprintf(stderr, "Failed to initialize manager, error: %d\n", ret);
+        return 0;
+    }
+
+    IOHIDManagerRegisterDeviceMatchingCallback(inputIOKit->hidManager, deviceAdded, inputIOKit);
+    IOHIDManagerRegisterDeviceRemovalCallback(inputIOKit->hidManager, deviceRemoved, inputIOKit);
 
     CFMutableDictionaryRef keyboard = createDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Keyboard);
     CFMutableDictionaryRef joystick = createDeviceMatchingDictionary(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
@@ -159,49 +166,16 @@ static void threadFunc(void* argument)
 
     CFRelease(criteria);
 
-    IOReturn ret = IOHIDManagerOpen(inputIOKit->hidManager, kIOHIDOptionsTypeNone);
-    if (ret != kIOReturnSuccess)
-    {
-        fprintf(stderr, "Failed to initialize manager, error: %d\n", ret);
-        return;
-    }
-
-    IOHIDManagerRegisterDeviceMatchingCallback(inputIOKit->hidManager, deviceAdded, inputIOKit);
-    IOHIDManagerRegisterDeviceRemovalCallback(inputIOKit->hidManager, deviceRemoved, inputIOKit);
-
     inputIOKit->runLoop = CFRunLoopGetCurrent();
 
     IOHIDManagerScheduleWithRunLoop(inputIOKit->hidManager, inputIOKit->runLoop, kCFRunLoopDefaultMode);
 
-    // signal that the thread has started
-    gpMutexLock(&inputIOKit->startMutex);
-    gpConditionBroadcast(&inputIOKit->startCondition);
-    gpMutexUnlock(&inputIOKit->startMutex);
-
-    CFRunLoopRun();
-
-    IOHIDManagerClose(inputIOKit->hidManager, kIOHIDOptionsTypeNone);
-    CFRelease(inputIOKit->hidManager);
+    return 1;
 }
 
-int gpInputInit(Input* input)
+int gpInputRun(Input* input)
 {
-    InputIOKit* inputIOKit = malloc(sizeof(InputIOKit));
-    input->opaque = inputIOKit;
-
-    gpConditionInit(&inputIOKit->startCondition);
-    gpMutexInit(&inputIOKit->startMutex);
-
-    gpMutexLock(&inputIOKit->startMutex);
-
-    gpThreadInit(&inputIOKit->thread, threadFunc, inputIOKit, "Input");
-
-    while (!inputIOKit->runLoop)
-    {
-        gpConditionWait(&inputIOKit->startCondition, &inputIOKit->startMutex);
-    }
-
-    gpMutexUnlock(&inputIOKit->startMutex);
+    CFRunLoopRun();
 
     return 1;
 }
@@ -214,9 +188,8 @@ int gpInputDestroy(Input* input)
 
         if (inputIOKit->runLoop) CFRunLoopStop(inputIOKit->runLoop);
 
-        gpThreadJoin(&inputIOKit->thread);
-        gpConditionDestroy(&inputIOKit->startCondition);
-        gpMutexDestroy(&inputIOKit->startMutex);
+        IOHIDManagerClose(inputIOKit->hidManager, kIOHIDOptionsTypeNone);
+        CFRelease(inputIOKit->hidManager);
 
         free(inputIOKit);
     }

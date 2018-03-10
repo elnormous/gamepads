@@ -6,24 +6,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "input.h"
+#include "thread.h"
 
-int main(int argc, const char* argv[])
+void threadFunc(void* argument)
 {
-    const char* output_file = "output.txt";
-    Input input;
-    int i;
     uint32_t usage;
-
-    for (i = 1; i < argc; ++i)
-    {
-        if (strcmp(argv[i], "-o") == 0)
-        {
-            if (++i < argc) output_file = argv[i];
-        }
-    }
-
-    gpInputInit(&input);
-
+    
     // TODO: print buttons and collect info
 
     // TODO: save log to file
@@ -50,10 +38,30 @@ int main(int argc, const char* argv[])
     printf("Move left thumbstick to the up (escape if the gamepad doesn't have it)\n");
     printf("Move right thumbstick to the right (escape if the gamepad doesn't have it)\n");
     printf("Move right thumbstick to the up (escape if the gamepad doesn't have it)\n");
+}
 
-    for (;;)
+int main(int argc, const char* argv[])
+{
+    const char* output_file = "output.txt";
+    Input input;
+    int i;
+    Thread thread;
+    Condition startCondition;
+    Mutex startMutex;
+
+    for (i = 1; i < argc; ++i)
     {
+        if (strcmp(argv[i], "-o") == 0)
+        {
+            if (++i < argc) output_file = argv[i];
+        }
     }
+
+    gpInputInit(&input);
+
+    gpThreadInit(&thread, threadFunc, NULL, "Capture");
+
+    gpInputRun(&input);
 
     return EXIT_SUCCESS;
 }
