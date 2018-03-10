@@ -14,6 +14,7 @@ typedef struct InputDI
 
 static BOOL CALLBACK enumDevicesCallback(const DIDEVICEINSTANCEW* didInstance, VOID* context)
 {
+    InputDI* inputDI = (InputDI*)context;
     char* name;
     DWORD vendorId, productId;
 
@@ -25,6 +26,23 @@ static BOOL CALLBACK enumDevicesCallback(const DIDEVICEINSTANCEW* didInstance, V
     productId = HIWORD(didInstance->guidProduct.Data1);
 
     fprintf(stdout, "Name: %s, vendor ID: 0x%04X, product ID: 0x%04X\n", name, vendorId, productId);
+
+    IDirectInputDevice8* device;
+    HRESULT hr = IDirectInput8_CreateDevice(inputDI->directInput, &didInstance->guidInstance, &device, NULL);
+
+    if (FAILED(hr))
+    {
+        fprintf(stderr, "Failed to create DirectInput device, error: %d\n", hr);
+        return DIENUM_CONTINUE;
+    }
+
+    hr = IDirectInputDevice_SetDataFormat(device, &c_dfDIJoystick2);
+
+    if (FAILED(hr))
+    {
+        fprintf(stderr, "Failed to set DirectInput device format, error: %d\n", hr);
+        return DIENUM_CONTINUE;
+    }
 
     return DIENUM_CONTINUE;
 }
@@ -49,6 +67,16 @@ int gpInputInit(Input* input)
     {
         fprintf(stderr, "Failed to enumerate devices, error: %d\n", hr);
         return 0;
+    }
+
+    return 1;
+}
+
+int gpInputRun()
+{
+    while (1)
+    {
+
     }
 
     return 1;
