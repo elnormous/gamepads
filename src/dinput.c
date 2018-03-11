@@ -10,6 +10,7 @@
 typedef struct InputDI
 {
     IDirectInput8* directInput;
+    HWND window;
 } InputDI;
 
 static BOOL CALLBACK enumDevicesCallback(const DIDEVICEINSTANCEW* didInstance, VOID* context)
@@ -74,9 +75,25 @@ int gpInputInit(Input* input)
 
 int gpInputRun()
 {
-    while (1)
+    MSG msg;
+    BOOL ret;
+    for (;;)
     {
+        ret = GetMessage(&msg, NULL, 0, 0);
 
+        if (ret > 0)
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+        else if (ret < 0)
+        {
+            // error
+        }
+        else
+        {
+            break;
+        }
     }
 
     return 1;
