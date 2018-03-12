@@ -2,7 +2,7 @@
 //  gamepads
 //
 
-#import <IOKit/hid/IOHIDManager.h>
+#include <IOKit/hid/IOHIDManager.h>
 #include "input.h"
 
 typedef struct InputIOKit
