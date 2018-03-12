@@ -103,7 +103,7 @@ static void deviceRemoved(void* ctx, IOReturn result, void* sender, IOHIDDeviceR
     fprintf(stdout, "Device removed\n");
 }
 
-static CFMutableDictionaryRef createDeviceMatchingDictionary(UInt32 usage_page, UInt32 usage)
+static CFMutableDictionaryRef createDeviceMatchingDictionary(UInt32 usagePage, UInt32 usage)
 {
     CFMutableDictionaryRef dictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
                                                                   &kCFTypeDictionaryKeyCallBacks,
@@ -111,15 +111,15 @@ static CFMutableDictionaryRef createDeviceMatchingDictionary(UInt32 usage_page, 
     if (!dictionary)
         return NULL;
 
-    CFNumberRef pageNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &usage_page);
-    if (!pageNumber)
+    CFNumberRef usagePageNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &usagePage);
+    if (!usagePageNumber)
     {
         CFRelease(dictionary);
         return NULL;
     }
 
-    CFDictionarySetValue(dictionary, CFSTR(kIOHIDDeviceUsagePageKey), pageNumber);
-    CFRelease(pageNumber);
+    CFDictionarySetValue(dictionary, CFSTR(kIOHIDDeviceUsagePageKey), usagePageNumber);
+    CFRelease(usagePageNumber);
 
     CFNumberRef usageNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &usage);
 
