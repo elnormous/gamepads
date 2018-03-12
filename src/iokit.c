@@ -141,7 +141,7 @@ int gpInputInit(Input* input)
     input->opaque = inputIOKit;
 
     inputIOKit->hidManager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
-    inputIOKit->runLoop = NULL;
+    inputIOKit->runLoop = CFRunLoopGetCurrent();
 
     IOReturn ret = IOHIDManagerOpen(inputIOKit->hidManager, kIOHIDOptionsTypeNone);
     if (ret != kIOReturnSuccess)
@@ -165,8 +165,6 @@ int gpInputInit(Input* input)
     IOHIDManagerSetDeviceMatchingMultiple(inputIOKit->hidManager, criteria);
 
     CFRelease(criteria);
-
-    inputIOKit->runLoop = CFRunLoopGetCurrent();
 
     IOHIDManagerScheduleWithRunLoop(inputIOKit->hidManager, inputIOKit->runLoop, kCFRunLoopDefaultMode);
 
