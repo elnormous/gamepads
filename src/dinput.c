@@ -101,6 +101,10 @@ int gpInputRun()
 
 int gpInputDestroy(Input* input)
 {
+    InputDI* inputDI = (InputDI*)input->opaque;
+
+    IDirectInput8_Release(inputDI->directInput);
+
     free(input->opaque);
 
     return 1;
