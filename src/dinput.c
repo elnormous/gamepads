@@ -89,6 +89,7 @@ int gpInputRun()
         else if (ret < 0)
         {
             // error
+            return 0;
         }
         else
         {
