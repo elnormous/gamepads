@@ -5,17 +5,16 @@
 #include <IOKit/hid/IOHIDManager.h>
 #include "input.h"
 
-typedef struct InputIOKit
+typedef struct GPInputIOKit
 {
     IOHIDManagerRef hidManager;
-    CFRunLoopRef runLoop;
-} InputIOKit;
+} GPInputIOKit;
 
-typedef struct DeviceIOKit
+typedef struct GPDeviceIOKit
 {
     int isKeyboard;
     int isGamepad;
-} DeviceIOKit;
+} GPDeviceIOKit;
 
 static void deviceInput(void* ctx, IOReturn result, void* sender, IOHIDValueRef value)
 {
@@ -40,9 +39,9 @@ static void deviceAdded(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef
     int32_t vendorId = 0;
     int32_t productId = 0;
     char name[256] = "";
-    DeviceIOKit* deviceIOKit = malloc(sizeof(DeviceIOKit));
+    GPDeviceIOKit* deviceIOKit = malloc(sizeof(GPDeviceIOKit));
 
-    memset(deviceIOKit, 0, sizeof(DeviceIOKit));
+    memset(deviceIOKit, 0, sizeof(GPDeviceIOKit));
 
     CFArrayRef usages = (CFArrayRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDDeviceUsagePairsKey));
 
@@ -135,13 +134,12 @@ static CFMutableDictionaryRef createDeviceMatchingDictionary(UInt32 usagePage, U
     return dictionary;
 }
 
-int gpInputInit(Input* input)
+int gpInputInit(GPInput* input)
 {
-    InputIOKit* inputIOKit = malloc(sizeof(InputIOKit));
+    GPInputIOKit* inputIOKit = malloc(sizeof(GPInputIOKit));
     input->opaque = inputIOKit;
 
     inputIOKit->hidManager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
-    inputIOKit->runLoop = CFRunLoopGetCurrent();
 
     IOReturn ret = IOHIDManagerOpen(inputIOKit->hidManager, kIOHIDOptionsTypeNone);
     if (ret != kIOReturnSuccess)
@@ -166,25 +164,16 @@ int gpInputInit(Input* input)
 
     CFRelease(criteria);
 
-    IOHIDManagerScheduleWithRunLoop(inputIOKit->hidManager, inputIOKit->runLoop, kCFRunLoopDefaultMode);
+    IOHIDManagerScheduleWithRunLoop(inputIOKit->hidManager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
 
     return 1;
 }
 
-int gpInputRun(Input* input)
-{
-    CFRunLoopRun();
-
-    return 1;
-}
-
-int gpInputDestroy(Input* input)
+int gpInputDestroy(GPInput* input)
 {
     if (input->opaque)
     {
-        InputIOKit* inputIOKit = (InputIOKit*)input->opaque;
-
-        if (inputIOKit->runLoop) CFRunLoopStop(inputIOKit->runLoop);
+        GPInputIOKit* inputIOKit = (GPInputIOKit*)input->opaque;
 
         IOHIDManagerClose(inputIOKit->hidManager, kIOHIDOptionsTypeNone);
         CFRelease(inputIOKit->hidManager);
@@ -195,7 +184,7 @@ int gpInputDestroy(Input* input)
     return 1;
 }
 
-int gpInputWaitKey(Input* input, uint32_t* usage)
+int gpInputWaitKey(GPInput* input, uint32_t* usage)
 {
     return 0;
 }

@@ -6,17 +6,16 @@
 
 #include <stdint.h>
 
-typedef struct Input
+typedef struct GPInput
 {
     void* opaque;
-} Input;
+} GPInput;
 
-typedef struct Gamepad
+typedef struct GPGamepad
 {
     void* opaque;
-} Gamepad;
+} GPGamepad;
 
-int gpInputInit(Input* input);
-int gpInputRun(Input* input);
-int gpInputDestroy(Input* input);
-int gpInputWaitKey(Input* input, uint32_t* usage);
+int gpInputInit(GPInput* input);
+int gpInputDestroy(GPInput* input);
+int gpInputWaitKey(GPInput* input, uint32_t* usage);

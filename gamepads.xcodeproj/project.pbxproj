@@ -7,44 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		300984F3202D38FF00BB0340 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984F2202D38FF00BB0340 /* main.c */; };
-		300984FB202E95F700BB0340 /* thread.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984FA202E95F700BB0340 /* thread.c */; };
-		300984FF202F365A00BB0340 /* iokit.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984FE202F365A00BB0340 /* iokit.c */; };
-		3071DEAA20425CE50073390E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3071DEA920425CE50073390E /* Foundation.framework */; };
-		3071DEAC20425CEC0073390E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3071DEAB20425CEC0073390E /* IOKit.framework */; };
+		306944B3205DF40A00C4969C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 306944B2205DF40A00C4969C /* Assets.xcassets */; };
+		306944DA205DF43400C4969C /* input.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984FD202F365A00BB0340 /* input.c */; };
+		306944DB205DF43400C4969C /* iokit.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984FE202F365A00BB0340 /* iokit.c */; };
+		306944DC205DF43400C4969C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984F2202D38FF00BB0340 /* main.c */; };
+		306944DD205DF43400C4969C /* thread.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984FA202E95F700BB0340 /* thread.c */; };
+		306944DE205DF43400C4969C /* macos.m in Sources */ = {isa = PBXBuildFile; fileRef = 306944A6205DF13900C4969C /* macos.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		300984ED202D38FF00BB0340 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		300984EF202D38FF00BB0340 /* gamepads */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gamepads; sourceTree = BUILT_PRODUCTS_DIR; };
 		300984F2202D38FF00BB0340 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		300984F9202E95F700BB0340 /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
 		300984FA202E95F700BB0340 /* thread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = thread.c; sourceTree = "<group>"; };
 		300984FD202F365A00BB0340 /* input.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = input.c; sourceTree = "<group>"; };
 		300984FE202F365A00BB0340 /* iokit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = iokit.c; sourceTree = "<group>"; };
 		30098503202FDB4E00BB0340 /* input.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = input.h; sourceTree = "<group>"; };
+		306944A6205DF13900C4969C /* macos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = macos.m; sourceTree = "<group>"; };
+		306944A8205DF15A00C4969C /* application.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = application.h; sourceTree = "<group>"; };
+		306944AD205DF40A00C4969C /* gamepads.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gamepads.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		306944B2205DF40A00C4969C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		306944B7205DF40A00C4969C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3071DEA920425CE50073390E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3071DEAB20425CEC0073390E /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		300984EC202D38FF00BB0340 /* Frameworks */ = {
+		306944AA205DF40A00C4969C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3071DEAA20425CE50073390E /* Foundation.framework in Frameworks */,
-				3071DEAC20425CEC0073390E /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +46,7 @@
 			isa = PBXGroup;
 			children = (
 				300984F1202D38FF00BB0340 /* src */,
+				306944AE205DF40A00C4969C /* macos */,
 				300984F0202D38FF00BB0340 /* Products */,
 				3071DEA820425CE50073390E /* Frameworks */,
 			);
@@ -63,7 +55,7 @@
 		300984F0202D38FF00BB0340 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				300984EF202D38FF00BB0340 /* gamepads */,
+				306944AD205DF40A00C4969C /* gamepads.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -77,8 +69,19 @@
 				300984F2202D38FF00BB0340 /* main.c */,
 				300984FA202E95F700BB0340 /* thread.c */,
 				300984F9202E95F700BB0340 /* thread.h */,
+				306944A6205DF13900C4969C /* macos.m */,
+				306944A8205DF15A00C4969C /* application.h */,
 			);
 			path = src;
+			sourceTree = "<group>";
+		};
+		306944AE205DF40A00C4969C /* macos */ = {
+			isa = PBXGroup;
+			children = (
+				306944B2205DF40A00C4969C /* Assets.xcassets */,
+				306944B7205DF40A00C4969C /* Info.plist */,
+			);
+			path = macos;
 			sourceTree = "<group>";
 		};
 		3071DEA820425CE50073390E /* Frameworks */ = {
@@ -93,13 +96,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		300984EE202D38FF00BB0340 /* gamepads */ = {
+		306944AC205DF40A00C4969C /* gamepads */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 300984F6202D38FF00BB0340 /* Build configuration list for PBXNativeTarget "gamepads" */;
+			buildConfigurationList = 306944D1205DF40A00C4969C /* Build configuration list for PBXNativeTarget "gamepads" */;
 			buildPhases = (
-				300984EB202D38FF00BB0340 /* Sources */,
-				300984EC202D38FF00BB0340 /* Frameworks */,
-				300984ED202D38FF00BB0340 /* CopyFiles */,
+				306944A9205DF40A00C4969C /* Sources */,
+				306944AA205DF40A00C4969C /* Frameworks */,
+				306944AB205DF40A00C4969C /* Resources */,
 			);
 			buildRules = (
 			);
@@ -107,8 +110,8 @@
 			);
 			name = gamepads;
 			productName = gamepads;
-			productReference = 300984EF202D38FF00BB0340 /* gamepads */;
-			productType = "com.apple.product-type.tool";
+			productReference = 306944AD205DF40A00C4969C /* gamepads.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -119,7 +122,7 @@
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Elviss Strazdins";
 				TargetAttributes = {
-					300984EE202D38FF00BB0340 = {
+					306944AC205DF40A00C4969C = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
@@ -131,25 +134,39 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 300984E6202D38FF00BB0340;
 			productRefGroup = 300984F0202D38FF00BB0340 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				300984EE202D38FF00BB0340 /* gamepads */,
+				306944AC205DF40A00C4969C /* gamepads */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		306944AB205DF40A00C4969C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				306944B3205DF40A00C4969C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		300984EB202D38FF00BB0340 /* Sources */ = {
+		306944A9205DF40A00C4969C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				300984FF202F365A00BB0340 /* iokit.c in Sources */,
-				300984FB202E95F700BB0340 /* thread.c in Sources */,
-				300984F3202D38FF00BB0340 /* main.c in Sources */,
+				306944DC205DF43400C4969C /* main.c in Sources */,
+				306944DE205DF43400C4969C /* macos.m in Sources */,
+				306944DB205DF43400C4969C /* iokit.c in Sources */,
+				306944DA205DF43400C4969C /* input.c in Sources */,
+				306944DD205DF43400C4969C /* thread.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,16 +258,44 @@
 			};
 			name = Release;
 		};
-		300984F7202D38FF00BB0340 /* Debug */ = {
+		306944D2205DF40A00C4969C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = macos/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = lv.elviss.gamepads;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
-		300984F8202D38FF00BB0340 /* Release */ = {
+		306944D3205DF40A00C4969C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = macos/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = lv.elviss.gamepads;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -267,11 +312,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		300984F6202D38FF00BB0340 /* Build configuration list for PBXNativeTarget "gamepads" */ = {
+		306944D1205DF40A00C4969C /* Build configuration list for PBXNativeTarget "gamepads" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				300984F7202D38FF00BB0340 /* Debug */,
-				300984F8202D38FF00BB0340 /* Release */,
+				306944D2205DF40A00C4969C /* Debug */,
+				306944D3205DF40A00C4969C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

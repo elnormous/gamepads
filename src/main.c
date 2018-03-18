@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "application.h"
 #include "input.h"
 #include "thread.h"
 
@@ -43,11 +44,13 @@ void threadFunc(void* argument)
 int main(int argc, const char* argv[])
 {
     const char* output_file = "output.txt";
-    Input input;
+    GPInput input;
     int i;
-    Thread thread;
-    Condition startCondition;
-    Mutex startMutex;
+    GPThread thread;
+    GPCondition startCondition;
+    GPMutex startMutex;
+    GPApplication application;
+    int result;
 
     for (i = 1; i < argc; ++i)
     {
@@ -61,7 +64,9 @@ int main(int argc, const char* argv[])
 
     gpThreadInit(&thread, threadFunc, NULL, "Capture");
 
-    gpInputRun(&input);
+    gpApplicationInit(&application);
+    result = gpApplicationRun(&application) ? EXIT_SUCCESS : EXIT_FAILURE;
+    gpApplicationDestroy(&application);
 
-    return EXIT_SUCCESS;
+    return result;
 }

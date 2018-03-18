@@ -28,7 +28,7 @@ static DWORD WINAPI threadFunction(LPVOID parameter)
 static void* threadFunction(void* parameter)
 #endif
 {
-    Thread* thread = (Thread*)parameter;
+    GPThread* thread = (GPThread*)parameter;
 
 #ifdef __APPLE__
     if (thread->name) pthread_setname_np(thread->name);
@@ -43,7 +43,7 @@ static void* threadFunction(void* parameter)
 #endif
 }
 
-int gpThreadInit(Thread* thread, void(*function)(void*), void* argument, const char* name)
+int gpThreadInit(GPThread* thread, void(*function)(void*), void* argument, const char* name)
 {
     thread->function = function;
     thread->argument = argument;
@@ -82,7 +82,7 @@ int gpThreadInit(Thread* thread, void(*function)(void*), void* argument, const c
 #endif
 }
 
-int gpThreadDestroy(Thread* thread)
+int gpThreadDestroy(GPThread* thread)
 {
 #if defined(_MSC_VER)
     return CloseHandle(thread->handle);
@@ -91,7 +91,7 @@ int gpThreadDestroy(Thread* thread)
 #endif
 }
 
-int gpThreadJoin(Thread* thread)
+int gpThreadJoin(GPThread* thread)
 {
 #if defined(_MSC_VER)
     return WaitForSingleObject(thread->handle, INFINITE) != WAIT_FAILED;
@@ -100,7 +100,7 @@ int gpThreadJoin(Thread* thread)
 #endif
 }
 
-int gpMutexInit(Mutex* mutex)
+int gpMutexInit(GPMutex* mutex)
 {
 #if defined(_MSC_VER)
     InitializeCriticalSection(&mutex->criticalSection);
@@ -110,7 +110,7 @@ int gpMutexInit(Mutex* mutex)
 #endif
 }
 
-int gpMutexDestroy(Mutex* mutex)
+int gpMutexDestroy(GPMutex* mutex)
 {
 #if defined(_MSC_VER)
     DeleteCriticalSection(&mutex->criticalSection);
@@ -120,7 +120,7 @@ int gpMutexDestroy(Mutex* mutex)
 #endif
 }
 
-int gpMutexLock(Mutex* mutex)
+int gpMutexLock(GPMutex* mutex)
 {
 #if defined(_MSC_VER)
     EnterCriticalSection(&mutex->criticalSection);
@@ -130,7 +130,7 @@ int gpMutexLock(Mutex* mutex)
 #endif
 }
 
-int gpMutexTryLock(Mutex* mutex)
+int gpMutexTryLock(GPMutex* mutex)
 {
 #if defined(_MSC_VER)
     return TryEnterCriticalSection(&mutex->criticalSection) != 0;
@@ -139,7 +139,7 @@ int gpMutexTryLock(Mutex* mutex)
 #endif
 }
 
-int gpMutexUnlock(Mutex* mutex)
+int gpMutexUnlock(GPMutex* mutex)
 {
 #if defined(_MSC_VER)
     LeaveCriticalSection(&mutex->criticalSection);
@@ -149,7 +149,7 @@ int gpMutexUnlock(Mutex* mutex)
 #endif
 }
 
-int gpConditionInit(Condition* condition)
+int gpConditionInit(GPCondition* condition)
 {
 #if defined(_MSC_VER)
     InitializeConditionVariable(&condition->conditionVariable);
@@ -159,7 +159,7 @@ int gpConditionInit(Condition* condition)
 #endif
 }
 
-int gpConditionDestroy(Condition* condition)
+int gpConditionDestroy(GPCondition* condition)
 {
 #if defined(_MSC_VER)
     return 1;
@@ -168,7 +168,7 @@ int gpConditionDestroy(Condition* condition)
 #endif
 }
 
-int gpConditionSignal(Condition* condition)
+int gpConditionSignal(GPCondition* condition)
 {
 #if defined(_MSC_VER)
     WakeConditionVariable(&condition->conditionVariable);
@@ -178,7 +178,7 @@ int gpConditionSignal(Condition* condition)
 #endif
 }
 
-int gpConditionBroadcast(Condition* condition)
+int gpConditionBroadcast(GPCondition* condition)
 {
 #if defined(_MSC_VER)
     WakeAllConditionVariable(&condition->conditionVariable);
@@ -188,7 +188,7 @@ int gpConditionBroadcast(Condition* condition)
 #endif
 }
 
-int gpConditionWait(Condition* condition, Mutex* mutex)
+int gpConditionWait(GPCondition* condition, GPMutex* mutex)
 {
 #if defined(_MSC_VER)
     return SleepConditionVariableCS(&condition->conditionVariable, &mutex->criticalSection, INFINITE) != 0;
@@ -197,7 +197,7 @@ int gpConditionWait(Condition* condition, Mutex* mutex)
 #endif
 }
 
-int gpConditionTimedWait(Condition* condition, Mutex* mutex, uint64_t ns)
+int gpConditionTimedWait(GPCondition* condition, GPMutex* mutex, uint64_t ns)
 {
 #if defined(_MSC_VER)
     return SleepConditionVariableCS(&condition->conditionVariable, &mutex->criticalSection, (DWORD)(ns / 1000000)) != 0;

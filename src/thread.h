@@ -11,7 +11,7 @@
 #include <pthread.h>
 #endif
 
-typedef struct Thread
+typedef struct GPThread
 {
     void(*function)(void*);
     void* argument;
@@ -22,38 +22,38 @@ typedef struct Thread
 #else
     pthread_t thread;
 #endif
-} Thread;
+} GPThread;
 
-typedef struct Mutex
+typedef struct GPMutex
 {
 #if defined(_MSC_VER)
     CRITICAL_SECTION criticalSection;
 #else
     pthread_mutex_t mutex;
 #endif
-} Mutex;
+} GPMutex;
 
-typedef struct Condition
+typedef struct GPCondition
 {
 #if defined(_MSC_VER)
     CONDITION_VARIABLE conditionVariable;
 #else
     pthread_cond_t condition;
 #endif
-} Condition;
+} GPCondition;
 
-int gpThreadInit(Thread* thread, void(*function)(void*), void* argument, const char* name);
-int gpThreadDestroy(Thread* thread);
-int gpThreadJoin(Thread* thread);
-int gpMutexInit(Mutex* mutex);
-int gpMutexDestroy(Mutex* mutex);
-int gpMutexLock(Mutex* mutex);
-int gpMutexTryLock(Mutex* mutex);
-int gpMutexUnlock(Mutex* mutex);
-int gpConditionInit(Condition* condition);
-int gpConditionDestroy(Condition* condition);
-int gpConditionSignal(Condition* condition);
-int gpConditionBroadcast(Condition* condition);
-int gpConditionWait(Condition* condition, Mutex* mutex);
-int gpConditionTimedWait(Condition* condition, Mutex* mutex, uint64_t ns);
+int gpThreadInit(GPThread* thread, void(*function)(void*), void* argument, const char* name);
+int gpThreadDestroy(GPThread* thread);
+int gpThreadJoin(GPThread* thread);
+int gpMutexInit(GPMutex* mutex);
+int gpMutexDestroy(GPMutex* mutex);
+int gpMutexLock(GPMutex* mutex);
+int gpMutexTryLock(GPMutex* mutex);
+int gpMutexUnlock(GPMutex* mutex);
+int gpConditionInit(GPCondition* condition);
+int gpConditionDestroy(GPCondition* condition);
+int gpConditionSignal(GPCondition* condition);
+int gpConditionBroadcast(GPCondition* condition);
+int gpConditionWait(GPCondition* condition, GPMutex* mutex);
+int gpConditionTimedWait(GPCondition* condition, GPMutex* mutex, uint64_t ns);
 int gpInterlockedCompareAndSwap(int32_t oldValue, int32_t newValue, int32_t* value);
