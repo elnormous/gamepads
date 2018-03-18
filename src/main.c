@@ -41,7 +41,11 @@ void threadFunc(void* argument)
     printf("Move right thumbstick to the up (escape if the gamepad doesn't have it)\n");
 }
 
+#ifdef WIN32
+int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow)
+#else
 int main(int argc, const char* argv[])
+#endif
 {
     const char* output_file = "output.txt";
     GPInput input;
@@ -52,6 +56,9 @@ int main(int argc, const char* argv[])
     GPApplication application;
     int result;
 
+#ifdef WIN32
+    // TODO: implement
+#else
     for (i = 1; i < argc; ++i)
     {
         if (strcmp(argv[i], "-o") == 0)
@@ -59,6 +66,7 @@ int main(int argc, const char* argv[])
             if (++i < argc) output_file = argv[i];
         }
     }
+#endif
 
     gpInputInit(&input);
 

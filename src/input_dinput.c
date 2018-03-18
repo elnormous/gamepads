@@ -73,33 +73,6 @@ int gpInputInit(GPInput* input)
     return 1;
 }
 
-int gpInputRun()
-{
-    MSG msg;
-    BOOL ret;
-    for (;;)
-    {
-        ret = GetMessage(&msg, NULL, 0, 0);
-
-        if (ret > 0)
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-        else if (ret < 0)
-        {
-            // error
-            return 0;
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    return 1;
-}
-
 int gpInputDestroy(GPInput* input)
 {
     GPInputDI* inputDI = (GPInputDI*)input->opaque;
