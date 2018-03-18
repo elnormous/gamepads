@@ -6,13 +6,26 @@
 #include "application.h"
 
 @interface AppDelegate: NSObject<NSApplicationDelegate>
-
+{
+    GPApplication* application;
+}
 @end
 
 @implementation AppDelegate
 
+-(id)initWithApplication:(GPApplication*)initApplication
+{
+    if (self = [super init])
+    {
+        application = initApplication;
+    }
+
+    return self;
+}
+
 -(void)applicationWillFinishLaunching:(__unused NSNotification*)notification
 {
+    gpWindowInit(&application->window);
 }
 
 -(void)applicationDidFinishLaunching:(__unused NSNotification*)notification
@@ -21,6 +34,7 @@
 
 -(void)applicationWillTerminate:(__unused NSNotification*)notification
 {
+    gpWindowDestroy(&application->window);
 }
 
 -(BOOL)applicationShouldTerminateAfterLastWindowClosed:(__unused NSApplication*)sender
@@ -50,13 +64,14 @@ int gpApplicationDestroy(GPApplication* application)
 
 int gpApplicationRun(GPApplication* application)
 {
-    @autoreleasepool
-    {
-        NSApplication* application = [NSApplication sharedApplication];
-        [application activateIgnoringOtherApps:YES];
-        [application setDelegate:[[[AppDelegate alloc] init] autorelease]];
-        [application run];
-    }
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+
+    NSApplication* sharedApplication = [NSApplication sharedApplication];
+    [sharedApplication activateIgnoringOtherApps:YES];
+    [sharedApplication setDelegate:[[[AppDelegate alloc] initWithApplication:application] autorelease]];
+    [sharedApplication run];
+
+    [pool release];
 
     return 1;
 }
