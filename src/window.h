@@ -6,7 +6,7 @@
 
 typedef struct GPWindow
 {
-    void* opaque
+    void* opaque;
 } GPWindow;
 
 int gpWindowInit(GPWindow* window);

@@ -7,15 +7,15 @@
 #include <dinput.h>
 #include "input.h"
 
-typedef struct InputDI
+typedef struct GPInputDI
 {
     IDirectInput8* directInput;
     HWND window;
-} InputDI;
+} GPInputDI;
 
 static BOOL CALLBACK enumDevicesCallback(const DIDEVICEINSTANCEW* didInstance, VOID* context)
 {
-    InputDI* inputDI = (InputDI*)context;
+    GPInputDI* inputDI = (GPInputDI*)context;
     char* name;
     DWORD vendorId, productId;
 
@@ -48,9 +48,9 @@ static BOOL CALLBACK enumDevicesCallback(const DIDEVICEINSTANCEW* didInstance, V
     return DIENUM_CONTINUE;
 }
 
-int gpInputInit(Input* input)
+int gpInputInit(GPInput* input)
 {
-    InputDI* inputDI = malloc(sizeof(InputDI));
+    GPInputDI* inputDI = malloc(sizeof(GPInputDI));
     input->opaque = inputDI;
 
     HINSTANCE instance = GetModuleHandleW(NULL);
@@ -100,9 +100,9 @@ int gpInputRun()
     return 1;
 }
 
-int gpInputDestroy(Input* input)
+int gpInputDestroy(GPInput* input)
 {
-    InputDI* inputDI = (InputDI*)input->opaque;
+    GPInputDI* inputDI = (GPInputDI*)input->opaque;
 
     IDirectInput8_Release(inputDI->directInput);
 
