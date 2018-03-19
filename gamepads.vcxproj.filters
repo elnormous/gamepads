@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\dinput.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -27,15 +24,24 @@
     <ClCompile Include="src\thread.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\input_dinput.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application_windows.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\dinput.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\thread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
