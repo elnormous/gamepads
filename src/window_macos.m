@@ -69,12 +69,15 @@ int gpWindowInit(GPWindow* window)
     [windowMacOS->window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     [windowMacOS->window setTitle:@"Gamepads"];
 
-    // TODO: create view
     NSRect windowFrame = [NSWindow contentRectForFrameRect:[windowMacOS->window frame]
                                                  styleMask:[windowMacOS->window styleMask]];
 
 
-    windowMacOS->view = [[NSTextField alloc] initWithFrame:windowFrame];
+    NSTextField* textField = [[NSTextField alloc] initWithFrame:windowFrame];
+    textField.editable = NO;
+    textField.usesSingleLineMode = NO;
+
+    windowMacOS->view = textField;
 
     windowMacOS->window.contentView = windowMacOS->view;
     [windowMacOS->window makeKeyAndOrderFront:nil];
