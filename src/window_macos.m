@@ -38,13 +38,6 @@ typedef struct GPWindowMacOS
 
 @end
 
-@interface ViewMacOS: NSView
-
-@end
-
-@implementation ViewMacOS
-@end;
-
 int gpWindowInit(GPWindow* window)
 {
     GPWindowMacOS* windowMacOS = malloc(sizeof(GPWindowMacOS));
@@ -81,7 +74,7 @@ int gpWindowInit(GPWindow* window)
                                                  styleMask:[windowMacOS->window styleMask]];
 
 
-    windowMacOS->view = [[ViewMacOS alloc] initWithFrame:windowFrame];
+    windowMacOS->view = [[NSTextField alloc] initWithFrame:windowFrame];
 
     windowMacOS->window.contentView = windowMacOS->view;
     [windowMacOS->window makeKeyAndOrderFront:nil];
