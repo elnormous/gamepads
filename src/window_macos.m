@@ -11,7 +11,7 @@ typedef struct GPWindowMacOS
     NSScreen* screen;
     NSWindow* window;
     NSTextField* textField;
-    id<NSWindowDelegate> windowDelegate;
+    NSObject<NSWindowDelegate>* windowDelegate;
 } GPWindowMacOS;
 
 @interface WindowDelegate: NSObject<NSWindowDelegate>
@@ -31,6 +31,12 @@ typedef struct GPWindowMacOS
     }
 
     return self;
+}
+
+-(void)appendString:(NSString*)string
+{
+    NSString* value = window->textField.stringValue;
+    window->textField.stringValue = [value stringByAppendingString:string];
 }
 
 -(void)handleQuit:(__unused id)sender
@@ -104,8 +110,8 @@ int gpLog(GPApplication* application, const char* string)
 {
     GPWindowMacOS* windowMacOS = (GPWindowMacOS*)application->window.opaque;
 
-    NSString* value = windowMacOS->textField.stringValue;
-    windowMacOS->textField.stringValue = [value stringByAppendingString:[NSString stringWithUTF8String:string]];
+    NSString* value = [NSString stringWithUTF8String:string];
+    [windowMacOS->windowDelegate performSelectorOnMainThread:@selector(appendString:) withObject:value waitUntilDone:NO];
 
     return 1;
 }
