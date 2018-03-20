@@ -159,6 +159,7 @@
     <ClCompile Include="src\input.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\thread.c" />
+    <ClCompile Include="src\window_windows.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application.h" />
