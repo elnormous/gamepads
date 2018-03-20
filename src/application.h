@@ -9,9 +9,9 @@
 typedef struct GPApplication
 {
     GPWindow window;
-    void* opaque;
 } GPApplication;
 
 int gpApplicationInit(GPApplication* application);
 int gpApplicationDestroy(GPApplication* application);
 int gpApplicationRun(GPApplication* application);
+int gpLog(GPApplication* application, const char* string);

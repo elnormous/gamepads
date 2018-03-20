@@ -5,6 +5,8 @@
 #include <Windows.h>
 #include "application.h"
 
+void gpMain(GPApplication* application);
+
 int gpApplicationInit(GPApplication* application)
 {
     return 1;
@@ -17,6 +19,8 @@ int gpApplicationDestroy(GPApplication* application)
 
 int gpApplicationRun(GPApplication* application)
 {
+    gpMain(application);
+
     MSG msg;
     BOOL ret;
     for (;;)

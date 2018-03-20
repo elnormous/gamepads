@@ -11,6 +11,7 @@
 
 void threadFunc(void* argument)
 {
+    GPApplication* application = (GPApplication*)argument;
     uint32_t usage;
     
     // TODO: print buttons and collect info
@@ -23,22 +24,34 @@ void threadFunc(void* argument)
 
     // TODO: port to Linux
 
-    printf("Press bottom face button (escape if the gamepad doesn't have it)\n");
-    printf("Press left face button (escape if the gamepad doesn't have it)\n");
-    printf("Press top face butto (escape if the gamepad doesn't have it)n\n");
-    printf("Press right face button (escape if the gamepad doesn't have it)\n");
-    printf("Press start button (escape if the gamepad doesn't have it)\n");
-    printf("Press back button (escape if the gamepad doesn't have it)\n");
-    printf("Press left shoulder button (escape if the gamepad doesn't have it)\n");
-    printf("Press right shoulder button (escape if the gamepad doesn't have it)\n");
-    printf("Press left thumbstick (escape if the gamepad doesn't have it)\n");
-    printf("Press right thumbstick (escape if the gamepad doesn't have it)\n");
-    printf("Press left trigger (escape if the gamepad doesn't have it)\n");
-    printf("Press right trigger (escape if the gamepad doesn't have it)\n");
-    printf("Move left thumbstick to the right (escape if the gamepad doesn't have it)\n");
-    printf("Move left thumbstick to the up (escape if the gamepad doesn't have it)\n");
-    printf("Move right thumbstick to the right (escape if the gamepad doesn't have it)\n");
-    printf("Move right thumbstick to the up (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press bottom face button (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press left face button (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press top face butto (escape if the gamepad doesn't have it)n\n");
+    gpLog(application, "Press right face button (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press start button (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press back button (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press left shoulder button (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press right shoulder button (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press left thumbstick (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press right thumbstick (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press left trigger (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press right trigger (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Move left thumbstick to the right (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Move left thumbstick to the up (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Move right thumbstick to the right (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Move right thumbstick to the up (escape if the gamepad doesn't have it)\n");
+}
+
+void gpMain(GPApplication* application)
+{
+    GPInput input;
+    GPThread thread;
+    GPCondition startCondition;
+    GPMutex startMutex;
+
+    gpInputInit(&input);
+
+    gpThreadInit(&thread, threadFunc, application, "Capture");
 }
 
 #ifdef WIN32
@@ -47,14 +60,10 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, in
 int main(int argc, const char* argv[])
 #endif
 {
-    const char* output_file = "output.txt";
-    GPInput input;
-    int i;
-    GPThread thread;
-    GPCondition startCondition;
-    GPMutex startMutex;
     GPApplication application;
+    int i;
     int result;
+    const char* output_file = "output.txt";
 
 #ifdef WIN32
     // TODO: implement
@@ -67,10 +76,6 @@ int main(int argc, const char* argv[])
         }
     }
 #endif
-
-    gpInputInit(&input);
-
-    gpThreadInit(&thread, threadFunc, NULL, "Capture");
 
     gpApplicationInit(&application);
     result = gpApplicationRun(&application) ? EXIT_SUCCESS : EXIT_FAILURE;

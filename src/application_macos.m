@@ -5,6 +5,8 @@
 #import <Cocoa/Cocoa.h>
 #include "application.h"
 
+void gpMain(GPApplication* application);
+
 @interface AppDelegate: NSObject<NSApplicationDelegate>
 {
     GPApplication* application;
@@ -26,6 +28,7 @@
 -(void)applicationWillFinishLaunching:(__unused NSNotification*)notification
 {
     gpWindowInit(&application->window);
+    gpMain(application);
 }
 
 -(void)applicationDidFinishLaunching:(__unused NSNotification*)notification

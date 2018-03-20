@@ -4,12 +4,13 @@
 
 #import <Cocoa/Cocoa.h>
 #include "window.h"
+#include "application.h"
 
 typedef struct GPWindowMacOS
 {
     NSScreen* screen;
     NSWindow* window;
-    NSView* view;
+    NSTextField* textField;
     id<NSWindowDelegate> windowDelegate;
 } GPWindowMacOS;
 
@@ -73,13 +74,11 @@ int gpWindowInit(GPWindow* window)
                                                  styleMask:[windowMacOS->window styleMask]];
 
 
-    NSTextField* textField = [[NSTextField alloc] initWithFrame:windowFrame];
-    textField.editable = NO;
-    textField.usesSingleLineMode = NO;
+    windowMacOS->textField = [[NSTextField alloc] initWithFrame:windowFrame];
+    windowMacOS->textField.editable = NO;
+    windowMacOS->textField.usesSingleLineMode = NO;
 
-    windowMacOS->view = textField;
-
-    windowMacOS->window.contentView = windowMacOS->view;
+    windowMacOS->window.contentView = windowMacOS->textField;
     [windowMacOS->window makeKeyAndOrderFront:nil];
 
     return 1;
@@ -91,12 +90,22 @@ int gpWindowDestroy(GPWindow* window)
     {
         GPWindowMacOS* windowMacOS = (GPWindowMacOS*)window->opaque;
 
-        [windowMacOS->view release];
+        [windowMacOS->textField release];
         windowMacOS->window.delegate = nil;
         [windowMacOS->window release];
 
         free(windowMacOS);
     }
+
+    return 1;
+}
+
+int gpLog(GPApplication* application, const char* string)
+{
+    GPWindowMacOS* windowMacOS = (GPWindowMacOS*)application->window.opaque;
+
+    NSString* value = windowMacOS->textField.stringValue;
+    windowMacOS->textField.stringValue = [value stringByAppendingString:[NSString stringWithUTF8String:string]];
 
     return 1;
 }
