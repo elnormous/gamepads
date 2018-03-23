@@ -22,19 +22,29 @@ typedef struct tagTHREADNAME_INFO
 #pragma pack(pop)
 #endif
 
+typedef struct ThreadData
+{
+    void(*function)(void*);
+    void* argument;
+    char* name;
+}ThreadData;
+
 #if defined(_MSC_VER)
 static DWORD WINAPI threadFunction(LPVOID parameter)
 #else
 static void* threadFunction(void* parameter)
 #endif
 {
-    GPThread* thread = (GPThread*)parameter;
+    ThreadData* threadData = (ThreadData*)parameter;
 
 #ifdef __APPLE__
-    if (thread->name) pthread_setname_np(thread->name);
+    if (threadData->name) pthread_setname_np(threadData->name);
 #endif
 
-    thread->function(thread->argument);
+    threadData->function(threadData->argument);
+
+    if (threadData->name) free(threadData->name);
+    free(threadData);
 
 #if defined(_MSC_VER)
     return 0;
@@ -45,12 +55,20 @@ static void* threadFunction(void* parameter)
 
 int gpThreadInit(GPThread* thread, void(*function)(void*), void* argument, const char* name)
 {
-    thread->function = function;
-    thread->argument = argument;
-    thread->name = name;
+    ThreadData* threadData = malloc(sizeof(ThreadData));
+    threadData->function = function;
+    threadData->argument = argument;
+    if (name)
+    {
+        size_t size = strlen(name) + 1;
+        threadData->name = malloc(size);
+        memcpy(threadData->name, name, size);
+    }
+    else
+        threadData->name = NULL;
 
 #if defined(_MSC_VER)
-    thread->handle = CreateThread(NULL, 0, threadFunction, thread, 0, &thread->threadId);
+    thread->handle = CreateThread(NULL, 0, threadFunction, threadData, 0, &thread->threadId);
     if (thread->handle == NULL) return 0;
 
     if (name)

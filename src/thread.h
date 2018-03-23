@@ -13,9 +13,6 @@
 
 typedef struct GPThread
 {
-    void(*function)(void*);
-    void* argument;
-    const char* name;
 #if defined(_MSC_VER)
     HANDLE handle;
     DWORD threadId;
