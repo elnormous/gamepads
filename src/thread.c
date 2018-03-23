@@ -90,7 +90,7 @@ int gpThreadInit(GPThread* thread, void(*function)(void*), void* argument, const
 
     return 1;
 #else
-    if (pthread_create(&thread->thread, NULL, threadFunction, thread) != 0) return 0;
+    if (pthread_create(&thread->thread, NULL, threadFunction, threadData) != 0) return 0;
 
 #ifndef __APPLE__
     if (name) pthread_setname_np(thread->thread, name);
