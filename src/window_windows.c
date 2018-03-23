@@ -2,6 +2,7 @@
 //  gamepads
 //
 
+#include <stdio.h>
 #include <Windows.h>
 #include "window.h"
 #include "application.h"
@@ -35,8 +36,9 @@ int gpWindowInit(GPWindow* window)
     wc.hInstance = instance;
     // Application icon should be the first resource
     //wc.hIcon = LoadIconW(instance, MAKEINTRESOURCEW(101));
+    wc.hIcon = NULL;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(COLOR_WINDOW));
+    wc.hbrBackground = (HBRUSH)GetStockObject(COLOR_WINDOW);
     wc.lpszMenuName = NULL;
     wc.lpszClassName = WINDOW_CLASS_NAME;
     wc.hIconSm = NULL;
@@ -57,13 +59,11 @@ int gpWindowInit(GPWindow* window)
 
     int width = CW_USEDEFAULT;
     int height = CW_USEDEFAULT;
-    int width = windowRect.right - windowRect.left;
-    int height = windowRect.bottom - windowRect.top;
 
     windowWindows->window = CreateWindowExW(windowExStyle, WINDOW_CLASS_NAME, L"Gamepads", windowStyle,
                                             x, y, width, height, NULL, NULL, instance, NULL);
 
-    if (!window)
+    if (!windowWindows->window)
     {
         fprintf(stderr, "Failed to create window\n");
         return 0;
