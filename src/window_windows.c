@@ -11,11 +11,32 @@ typedef struct GPWindowWindows
 {
     ATOM windowClass;
     HWND window;
+    HWND textBox;
 } GPWindowWindows;
 
 static LRESULT CALLBACK windowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    return DefWindowProcW(window, msg, wParam, lParam);   
+    GPWindowWindows* windowWindows = (GPWindowWindows*)GetWindowLongPtr(window, GWLP_USERDATA);
+    if (!windowWindows) return DefWindowProcW(window, msg, wParam, lParam);
+
+    switch (msg)
+    {
+        case WM_SIZE:
+        {
+            RECT clientRect;
+            GetClientRect(window, &clientRect);
+
+            SetWindowPos(windowWindows->textBox, NULL,
+                clientRect.left, clientRect.top,
+                clientRect.right - clientRect.left,
+                clientRect.bottom - clientRect.top,
+                0);
+
+            break;
+        }
+    }
+
+    return DefWindowProcW(window, msg, wParam, lParam); 
 }
 
 static const LPCWSTR WINDOW_CLASS_NAME = L"gamepads";
@@ -61,11 +82,27 @@ int gpWindowInit(GPWindow* window)
     int height = CW_USEDEFAULT;
 
     windowWindows->window = CreateWindowExW(windowExStyle, WINDOW_CLASS_NAME, L"Gamepads", windowStyle,
-                                            x, y, width, height, NULL, NULL, instance, NULL);
+        x, y, width, height, NULL, NULL, instance, NULL);
 
     if (!windowWindows->window)
     {
         fprintf(stderr, "Failed to create window\n");
+        return 0;
+    }
+
+    RECT clientRect;
+    GetClientRect(windowWindows->window, &clientRect);
+
+    windowWindows->textBox = CreateWindowExW(WS_EX_CLIENTEDGE, L"EDIT", L"",
+        WS_CHILD | WS_VISIBLE | ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | ES_AUTOHSCROLL,
+        clientRect.left, clientRect.top,
+        clientRect.right - clientRect.left,
+        clientRect.bottom - clientRect.top,
+        windowWindows->window, NULL, instance, NULL);
+
+    if (!windowWindows->textBox)
+    {
+        fprintf(stderr, "Failed to create text box\n");
         return 0;
     }
 
@@ -81,6 +118,7 @@ int gpWindowDestroy(GPWindow* window)
     {
         GPWindowWindows* windowWindows = (GPWindowWindows*)window->opaque;
 
+        if (windowWindows->textBox) DestroyWindow(windowWindows->textBox);
         if (windowWindows->window) DestroyWindow(windowWindows->window);
         if (windowWindows->windowClass) UnregisterClassW(WINDOW_CLASS_NAME, GetModuleHandleW(NULL));
 
