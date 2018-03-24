@@ -12,7 +12,7 @@ typedef struct GPWindowMacOS
     NSWindow* window;
     NSTextField* textField;
     NSObject<NSWindowDelegate>* windowDelegate;
-    NSString* text;
+    NSMutableString* text;
 } GPWindowMacOS;
 
 @interface WindowDelegate: NSObject<NSWindowDelegate>
@@ -80,7 +80,7 @@ int gpWindowInit(GPWindow* window)
     windowMacOS->textField.usesSingleLineMode = NO;
     windowMacOS->textField.selectable = YES;
 
-    windowMacOS->text = @"";
+    windowMacOS->text = [[NSMutableString alloc] init];
 
     windowMacOS->window.contentView = windowMacOS->textField;
     [windowMacOS->window makeKeyAndOrderFront:nil];
@@ -94,6 +94,7 @@ int gpWindowDestroy(GPWindow* window)
     {
         GPWindowMacOS* windowMacOS = (GPWindowMacOS*)window->opaque;
 
+        [windowMacOS->text release];
         [windowMacOS->textField release];
         windowMacOS->window.delegate = nil;
         [windowMacOS->window release];
@@ -108,8 +109,9 @@ int gpLog(GPApplication* application, const char* string)
 {
     GPWindowMacOS* windowMacOS = (GPWindowMacOS*)application->window.opaque;
 
-    windowMacOS->text = [windowMacOS->text stringByAppendingString:[NSString stringWithUTF8String:string]];
-    [windowMacOS->textField performSelectorOnMainThread:@selector(setStringValue:) withObject:windowMacOS->text waitUntilDone:NO];
+    [windowMacOS->text appendString:[NSString stringWithUTF8String:string]];
+
+    [windowMacOS->textField performSelectorOnMainThread:@selector(setStringValue:) withObject:[NSString stringWithString:windowMacOS->text] waitUntilDone:NO];
 
     return 1;
 }
