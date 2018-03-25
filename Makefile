@@ -49,9 +49,15 @@ ifeq ($(platform),macos)
 bundle:
 	mkdir -p $(EXECUTABLE).app
 	mkdir -p $(EXECUTABLE).app/Contents
-	cp -f macos/app/Info.plist $(EXECUTABLE).app/Contents
+	cp -f macos/Info.plist $(EXECUTABLE).app/Contents
 	mkdir -p $(EXECUTABLE).app/Contents/MacOS
 	cp -f $(EXECUTABLE) $(EXECUTABLE).app/Contents/MacOS
+	sed -e s/'$$(DEVELOPMENT_LANGUAGE)'/en/ \
+		-e s/'$$(EXECUTABLE_NAME)'/gamepads/ \
+		-e s/'$$(PRODUCT_BUNDLE_IDENTIFIER)'/lv.elviss.gamepads/ \
+		-e s/'$$(PRODUCT_NAME)'/gamepads/ \
+		-e s/'$$(MACOSX_DEPLOYMENT_TARGET)'/10.13/ \
+		macos/Info.plist > gamepads.app/Contents/Info.plist
 endif
 
 $(EXECUTABLE): $(OBJECTS)
