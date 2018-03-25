@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <Windows.h>
+#include <Strsafe.h>
 #include "window.h"
 #include "application.h"
 
@@ -12,6 +13,8 @@ typedef struct GPWindowWindows
     ATOM windowClass;
     HWND window;
     HWND textBox;
+    LPWSTR* text;
+    size_t textSize;
 } GPWindowWindows;
 
 static LRESULT CALLBACK windowProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -44,6 +47,7 @@ static const LPCWSTR WINDOW_CLASS_NAME = L"gamepads";
 int gpWindowInit(GPWindow* window)
 {
     GPWindowWindows* windowWindows = malloc(sizeof(GPWindowWindows));
+    memset(windowWindows, 0, sizeof(GPWindowWindows));
     window->opaque = windowWindows;
 
     HINSTANCE instance = GetModuleHandleW(NULL);
@@ -109,6 +113,10 @@ int gpWindowInit(GPWindow* window)
     ShowWindow(windowWindows->window, SW_SHOW);
     SetWindowLongPtr(windowWindows->window, GWLP_USERDATA, (LONG_PTR)windowWindows);
 
+    windowWindows->textSize = 1;
+    windowWindows->text = malloc(windowWindows->textSize * sizeof(WCHAR));
+    windowWindows->text[0] = 0;
+
     return 1;
 }
 
@@ -130,5 +138,19 @@ int gpWindowDestroy(GPWindow* window)
 
 int gpLog(GPApplication* application, const char* string)
 {
+    GPWindowWindows* windowWindows = (GPWindowWindows*)application->window.opaque;
+
+    WCHAR wString[256];
+    int length = MultiByteToWideChar(CP_UTF8, 0, string, -1, wString, 256);
+    if (length == 0) return 0;
+
+    windowWindows->textSize += (length + 2 - 1); // include \r\n, exclude the terminating null char
+    windowWindows->text = realloc(windowWindows->text, windowWindows->textSize * sizeof(WCHAR));
+
+    StringCchCatW(windowWindows->text, windowWindows->textSize, wString);
+    StringCchCatW(windowWindows->text, windowWindows->textSize, L"\r\n");
+
+    if (!SendMessageTimeoutW(windowWindows->textBox, WM_SETTEXT, 0, (LPARAM)windowWindows->text, SMTO_NORMAL, 5000, NULL)) return 0;
+
     return 1;
 }
