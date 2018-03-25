@@ -51,6 +51,7 @@ static BOOL CALLBACK enumDevicesCallback(const DIDEVICEINSTANCEW* didInstance, V
 int gpInputInit(GPInput* input)
 {
     GPInputDI* inputDI = malloc(sizeof(GPInputDI));
+    memset(inputDI, 0, sizeof(GPInputDI));
     input->opaque = inputDI;
 
     HINSTANCE instance = GetModuleHandleW(NULL);

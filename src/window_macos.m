@@ -43,6 +43,7 @@ typedef struct GPWindowMacOS
 int gpWindowInit(GPWindow* window)
 {
     GPWindowMacOS* windowMacOS = malloc(sizeof(GPWindowMacOS));
+    memset(windowMacOS, 0, sizeof(GPWindowMacOS));
     window->opaque = windowMacOS;
 
     windowMacOS->screen = [NSScreen mainScreen];

@@ -40,7 +40,6 @@ static void deviceAdded(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef
     int32_t productId = 0;
     char name[256] = "";
     GPDeviceIOKit* deviceIOKit = malloc(sizeof(GPDeviceIOKit));
-
     memset(deviceIOKit, 0, sizeof(GPDeviceIOKit));
 
     CFArrayRef usages = (CFArrayRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDDeviceUsagePairsKey));
