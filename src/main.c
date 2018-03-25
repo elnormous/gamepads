@@ -24,22 +24,22 @@ void threadFunc(void* argument)
 
     // TODO: port to Linux
 
-    gpLog(application, "Press bottom face button (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Press left face button (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Press top face butto (escape if the gamepad doesn't have it)n\n");
-    gpLog(application, "Press right face button (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Press start button (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Press back button (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Press left shoulder button (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Press right shoulder button (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Press left thumbstick (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Press right thumbstick (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Press left trigger (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Press right trigger (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Move left thumbstick to the right (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Move left thumbstick to the up (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Move right thumbstick to the right (escape if the gamepad doesn't have it)\n");
-    gpLog(application, "Move right thumbstick to the up (escape if the gamepad doesn't have it)\n");
+    gpLog(application, "Press bottom face button (escape if the gamepad doesn't have it)");
+    gpLog(application, "Press left face button (escape if the gamepad doesn't have it)");
+    gpLog(application, "Press top face butto (escape if the gamepad doesn't have it)n");
+    gpLog(application, "Press right face button (escape if the gamepad doesn't have it)");
+    gpLog(application, "Press start button (escape if the gamepad doesn't have it)");
+    gpLog(application, "Press back button (escape if the gamepad doesn't have it)");
+    gpLog(application, "Press left shoulder button (escape if the gamepad doesn't have it)");
+    gpLog(application, "Press right shoulder button (escape if the gamepad doesn't have it)");
+    gpLog(application, "Press left thumbstick (escape if the gamepad doesn't have it)");
+    gpLog(application, "Press right thumbstick (escape if the gamepad doesn't have it)");
+    gpLog(application, "Press left trigger (escape if the gamepad doesn't have it)");
+    gpLog(application, "Press right trigger (escape if the gamepad doesn't have it)");
+    gpLog(application, "Move left thumbstick to the right (escape if the gamepad doesn't have it)");
+    gpLog(application, "Move left thumbstick to the up (escape if the gamepad doesn't have it)");
+    gpLog(application, "Move right thumbstick to the right (escape if the gamepad doesn't have it)");
+    gpLog(application, "Move right thumbstick to the up (escape if the gamepad doesn't have it)");
 }
 
 void gpMain(GPApplication* application)

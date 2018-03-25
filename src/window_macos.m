@@ -111,6 +111,7 @@ int gpLog(GPApplication* application, const char* string)
     GPWindowMacOS* windowMacOS = (GPWindowMacOS*)application->window.opaque;
 
     [windowMacOS->text appendString:[NSString stringWithUTF8String:string]];
+    [windowMacOS->text appendString:@"\n"];
 
     [windowMacOS->textField performSelectorOnMainThread:@selector(setStringValue:) withObject:[NSString stringWithString:windowMacOS->text] waitUntilDone:NO];
 
