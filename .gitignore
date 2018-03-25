@@ -4,3 +4,7 @@ gamepads.VC.VC.opendb
 gamepads.VC.db
 x64/
 Win32/
+gamepads
+gamepads.app
+*.o
+*.d
