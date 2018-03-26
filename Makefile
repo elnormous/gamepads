@@ -65,3 +65,12 @@ $(EXECUTABLE): $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -MMD -MP $< -o $@
+
+.PHONY: clean
+clean:
+ifeq ($(platform),windows)
+	-del /f /q $(EXECUTABLE).exe *.o *.d
+else
+	$(RM) $(EXECUTABLE) *.o *.d $(EXECUTABLE).exe
+	$(RM) -r $(EXECUTABLE).app
+endif
