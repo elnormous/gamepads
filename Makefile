@@ -57,7 +57,7 @@ bundle:
 		-e s/'$$(PRODUCT_BUNDLE_IDENTIFIER)'/lv.elviss.gamepads/ \
 		-e s/'$$(PRODUCT_NAME)'/gamepads/ \
 		-e s/'$$(MACOSX_DEPLOYMENT_TARGET)'/10.13/ \
-		macos/Info.plist > gamepads.app/Contents/Info.plist
+		macos/Info.plist > $(EXECUTABLE).app/Contents/Info.plist
 endif
 
 $(EXECUTABLE): $(OBJECTS)
