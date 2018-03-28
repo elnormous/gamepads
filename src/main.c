@@ -66,7 +66,9 @@ int main(int argc, const char* argv[])
     const char* output_file = "output.txt";
 
 #ifdef WIN32
-    // TODO: implement
+    // TODO: implement command line parsing
+    int argc = 0;
+    const char** argv = NULL;
 #else
     for (i = 1; i < argc; ++i)
     {
@@ -77,7 +79,7 @@ int main(int argc, const char* argv[])
     }
 #endif
 
-    gpApplicationInit(&application);
+    gpApplicationInit(&application, argc, argv);
     result = gpApplicationRun(&application) ? EXIT_SUCCESS : EXIT_FAILURE;
     gpApplicationDestroy(&application);
 

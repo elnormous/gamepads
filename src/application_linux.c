@@ -8,8 +8,11 @@
 
 void gpMain(GPApplication* application);
 
-int gpApplicationInit(GPApplication* application)
+int gpApplicationInit(GPApplication* application, int argc, const char** argv)
 {
+    application->argc = argc;
+    application->argv = argv;
+
     if (!XInitThreads())
     {
         fprintf(stderr, "Failed to initialize thread support\n");

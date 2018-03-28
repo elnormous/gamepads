@@ -42,7 +42,8 @@ int gpWindowInit(GPWindow* window)
         CWBorderPixel | CWBackPixel | CWEventMask, &swa);
 
     XSetStandardProperties(windowLinux->display,
-        windowLinux->window, "Gamepads", "Gamepads", None, NULL, 0, NULL);
+        windowLinux->window, "Gamepads", "Gamepads", None,
+        windowLinux->argv, windowLinux->argc, NULL);
 
     XMapWindow(windowLinux->display, windowLinux->window);
 

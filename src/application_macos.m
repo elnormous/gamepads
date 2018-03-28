@@ -55,8 +55,11 @@ void gpMain(GPApplication* application);
 
 @end
 
-int gpApplicationInit(GPApplication* application)
+int gpApplicationInit(GPApplication* application, int argc, const char** argv)
 {
+    application->argc = argc;
+    application->argv = argv;
+
     return 1;
 }
 
