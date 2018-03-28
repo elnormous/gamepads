@@ -27,7 +27,7 @@ void gpMain(GPApplication* application);
 
 -(void)applicationWillFinishLaunching:(__unused NSNotification*)notification
 {
-    gpWindowInit(&application->window);
+    gpWindowInit(&application->window, application->argc, application->argv);
     gpMain(application);
 }
 

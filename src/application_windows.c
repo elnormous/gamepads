@@ -23,7 +23,7 @@ int gpApplicationDestroy(GPApplication* application)
 
 int gpApplicationRun(GPApplication* application)
 {
-    gpWindowInit(&application->window);
+    gpWindowInit(&application->window, application->argc, application->argv);
 
     gpMain(application);
 
