@@ -11,4 +11,6 @@ typedef struct GPWindowLinux
 {
     Display* display;
     Window window;
+    Atom protocolsAtom;
+    Atom deleteAtom;
 } GPWindowLinux;

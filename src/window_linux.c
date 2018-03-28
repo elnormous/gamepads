@@ -46,6 +46,10 @@ int gpWindowInit(GPWindow* window)
 
     XMapWindow(windowLinux->display, windowLinux->window);
 
+    windowLinux->protocolsAtom = XInternAtom(windowLinux->display, "WM_PROTOCOLS", False);
+    windowLinux->deleteAtom = XInternAtom(windowLinux->display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(windowLinux->display, windowLinux->window, &windowLinux->deleteAtom, 1);
+
     return 1;
 }
 

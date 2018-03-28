@@ -40,6 +40,11 @@ int gpApplicationRun(GPApplication* application)
 
         switch (event.type)
         {
+            case ClientMessage:
+                if (event.xclient.message_type == windowLinux->protocolsAtom &&
+                    event.xclient.data.l[0] == windowLinux->deleteAtom)
+                    running = 0;
+                break;
             case KeyPress:
                 break;
         }
