@@ -15,7 +15,8 @@ LDFLAGS=-O2
 ifeq ($(platform),windows)
 LDFLAGS+=-u WinMain -ldinput8.lib -ldxguid.lib
 else ifeq ($(platform),linux)
-LDFLAGS+=-lpthread
+CFLAGS+=-D_GNU_SOURCE
+LDFLAGS+=-lpthread -lX11
 else ifeq ($(platform),macos)
 LDFLAGS+=-framework Cocoa -framework Foundation -framework IOKit
 endif

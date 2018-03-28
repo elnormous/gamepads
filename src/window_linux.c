@@ -2,21 +2,49 @@
 //  gamepads
 //
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "window.h"
+#include <X11/Xutil.h>
+#include "window_linux.h"
 #include "application.h"
-
-typedef struct GPWindowLinux
-{
-    void* data;
-} GPWindowLinux;
 
 int gpWindowInit(GPWindow* window)
 {
     GPWindowLinux* windowLinux = malloc(sizeof(GPWindowLinux));
     memset(windowLinux, 0, sizeof(GPWindowLinux));
     window->opaque = windowLinux;
+
+    windowLinux->display = XOpenDisplay(NULL);
+
+    if (!windowLinux->display)
+    {
+        fprintf(stderr, "Failed to open display\n");
+        return 0;
+    }
+
+    Screen* screen = XDefaultScreenOfDisplay(windowLinux->display);
+    int screenIndex = XScreenNumberOfScreen(screen);
+
+    unsigned int width = XWidthOfScreen(screen) * 0.6f;
+    unsigned int height = XHeightOfScreen(screen) * 0.6f;
+
+    XSetWindowAttributes swa;
+    swa.background_pixel = XWhitePixel(windowLinux->display, screenIndex);
+    swa.border_pixel = 0;
+    swa.event_mask = KeyPress;
+
+    windowLinux->window = XCreateWindow(windowLinux->display,
+        RootWindow(windowLinux->display, screenIndex),
+        0, 0, width, height,
+        0, DefaultDepth(windowLinux->display, screenIndex), InputOutput,
+        DefaultVisual(windowLinux->display, screenIndex),
+        CWBorderPixel | CWBackPixel | CWEventMask, &swa);
+
+    XSetStandardProperties(windowLinux->display,
+        windowLinux->window, "Gamepads", "Gamepads", None, NULL, 0, NULL);
+
+    XMapWindow(windowLinux->display, windowLinux->window);
 
     return 1;
 }
@@ -29,13 +57,6 @@ int gpWindowDestroy(GPWindow* window)
 
         free(windowLinux);
     }
-
-    return 1;
-}
-
-int gpLog(GPApplication* application, const char* string)
-{
-    GPWindowLinux* windowLinux = (GPWindowLinux*)application->window.opaque;
 
     return 1;
 }
