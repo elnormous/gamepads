@@ -26,7 +26,9 @@ ifeq ($(platform),windows)
 SOURCES+=src/application_windows.c \
 	src/input_dinput.c \
 	src/window_windows.c
-else ifeq ($(platform),linux)
+else ifeq ($(platform),linux) src/application_linux.c \
+	src/input_linux.c \
+	src/window_linux.c
 else ifeq ($(platform),macos)
 SOURCES+=src/application_macos.c \
 	src/input_iokit.c \

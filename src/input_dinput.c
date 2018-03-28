@@ -80,7 +80,7 @@ int gpInputDestroy(GPInput* input)
 
     IDirectInput8_Release(inputDI->directInput);
 
-    free(input->opaque);
+    free(inputDI);
 
     return 1;
 }

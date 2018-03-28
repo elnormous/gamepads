@@ -2,7 +2,6 @@
 //  gamepads
 //
 
-#include <Windows.h>
 #include "application.h"
 #include "window.h"
 
@@ -24,27 +23,9 @@ int gpApplicationRun(GPApplication* application)
 
     gpMain(application);
 
-    MSG msg;
-    BOOL ret;
     for (;;)
     {
-        ret = GetMessage(&msg, NULL, 0, 0);
 
-        if (ret > 0)
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-        else if (ret < 0)
-        {
-            // error
-            gpWindowDestroy(&application->window);
-            return 0;
-        }
-        else
-        {
-            break;
-        }
     }
 
     gpWindowDestroy(&application->window);
