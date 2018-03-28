@@ -69,8 +69,8 @@ $(EXECUTABLE): $(OBJECTS)
 .PHONY: clean
 clean:
 ifeq ($(platform),windows)
-	-del /f /q $(EXECUTABLE).exe *.o *.d
+	-del /f /q $(EXECUTABLE).exe src\*.o src\*.d
 else
-	$(RM) $(EXECUTABLE) *.o *.d $(EXECUTABLE).exe
+	$(RM) $(EXECUTABLE) src/*.o src/*.d $(EXECUTABLE).exe
 	$(RM) -r $(EXECUTABLE).app
 endif
