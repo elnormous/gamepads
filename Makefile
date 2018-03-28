@@ -15,6 +15,7 @@ LDFLAGS=-O2
 ifeq ($(platform),windows)
 LDFLAGS+=-u WinMain -ldinput8.lib -ldxguid.lib
 else ifeq ($(platform),linux)
+LDFLAGS+=-lpthread
 else ifeq ($(platform),macos)
 LDFLAGS+=-framework Cocoa -framework Foundation -framework IOKit
 endif
@@ -26,7 +27,8 @@ ifeq ($(platform),windows)
 SOURCES+=src/application_windows.c \
 	src/input_dinput.c \
 	src/window_windows.c
-else ifeq ($(platform),linux) src/application_linux.c \
+else ifeq ($(platform),linux)
+SOURCES+=src/application_linux.c \
 	src/input_linux.c \
 	src/window_linux.c
 else ifeq ($(platform),macos)
