@@ -166,6 +166,7 @@
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\thread.h" />
     <ClInclude Include="src\window.h" />
+    <ClInclude Include="src\window_windows.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
