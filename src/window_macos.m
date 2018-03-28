@@ -2,18 +2,8 @@
 //  gamepads
 //
 
-#import <Cocoa/Cocoa.h>
-#include "window.h"
+#include "window_macos.h"
 #include "application.h"
-
-typedef struct GPWindowMacOS
-{
-    NSScreen* screen;
-    NSWindow* window;
-    NSTextField* textField;
-    NSObject<NSWindowDelegate>* windowDelegate;
-    NSMutableString* text;
-} GPWindowMacOS;
 
 @interface WindowDelegate: NSObject<NSWindowDelegate>
 {
@@ -102,18 +92,6 @@ int gpWindowDestroy(GPWindow* window)
 
         free(windowMacOS);
     }
-
-    return 1;
-}
-
-int gpLog(GPApplication* application, const char* string)
-{
-    GPWindowMacOS* windowMacOS = (GPWindowMacOS*)application->window.opaque;
-
-    [windowMacOS->text appendString:[NSString stringWithUTF8String:string]];
-    [windowMacOS->text appendString:@"\n"];
-
-    [windowMacOS->textField performSelectorOnMainThread:@selector(setStringValue:) withObject:[NSString stringWithString:windowMacOS->text] waitUntilDone:NO];
 
     return 1;
 }

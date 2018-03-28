@@ -2,8 +2,8 @@
 //  gamepads
 //
 
-#import <Cocoa/Cocoa.h>
 #include "application.h"
+#include "window_macos.h"
 
 void gpMain(GPApplication* application);
 
@@ -75,6 +75,18 @@ int gpApplicationRun(GPApplication* application)
     [sharedApplication run];
 
     [pool release];
+
+    return 1;
+}
+
+int gpLog(GPApplication* application, const char* string)
+{
+    GPWindowMacOS* windowMacOS = (GPWindowMacOS*)application->window.opaque;
+
+    [windowMacOS->text appendString:[NSString stringWithUTF8String:string]];
+    [windowMacOS->text appendString:@"\n"];
+
+    [windowMacOS->textField performSelectorOnMainThread:@selector(setStringValue:) withObject:[NSString stringWithString:windowMacOS->text] waitUntilDone:NO];
 
     return 1;
 }
