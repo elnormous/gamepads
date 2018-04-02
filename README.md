@@ -47,11 +47,10 @@ Some of the developers have more than one ID
 | GH4 Guitar | 0x1430 | 0x4734 | 4 |
 | Gamepad F310 | 0x046D | 0xC21D | 4 |
 | Gamepad for Xbox 360 | 0x0E6F | 0x0301 | 4 |
-| Gamepad for Xbox 360 Z | 0x0E6F | 0x0401 | 4 |
+| Gamepad for Xbox 360 Z (GameStop Xbox 360 controller) | 0x0E6F | 0x0401 | 4 |
 | Gamepad for Xbox 360 ZZ | 0x12AB | 0x0302 | 4 |
 | Gamepad for Xbox 360 ZZZ | 0x1BAD | 0xF902 | 4 |
 | Gamestop Xbox 360 controller | 0x1BAD | 0xF901 | 4 |
-| GameStop Xbox 360 controller | 0x0E6F | 0x0401 | 4 |
 | Guitar Hero for PCMAC | 0x1430 | 0x474C | 4 |
 | Harmonix Drum Kit for Xbox 360 | 0x1BAD | 0x0003 | 4 |
 | Harmonix Guitar for Xbox 360 | 0x1BAD | 0x0002 | 4 |
