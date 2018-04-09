@@ -51,6 +51,22 @@ int gpWindowInit(GPWindow* window, int argc, const char** argv)
     windowLinux->deleteAtom = XInternAtom(windowLinux->display, "WM_DELETE_WINDOW", False);
     XSetWMProtocols(windowLinux->display, windowLinux->window, &windowLinux->deleteAtom, 1);
 
+    windowLinux->gc = XCreateGC(windowLinux->display, windowLinux->window, 0, 0);
+    XSetForeground(windowLinux->display, windowLinux->gc, 0);
+
+    windowLinux->font = XLoadQueryFont(windowLinux->display, "fixed");
+    if (!windowLinux->font)
+    {
+        fprintf(stderr, "Failed to load font\n");
+        return 0;
+    }
+
+    XSetFont(windowLinux->display, windowLinux->gc, windowLinux->font->fid);
+
+    windowLinux->textSize = 1;
+    windowLinux->text = malloc(windowLinux->textSize);
+    windowLinux->text[0] = 0;
+
     return 1;
 }
 
@@ -59,6 +75,10 @@ int gpWindowDestroy(GPWindow* window)
     if (window->opaque)
     {
         GPWindowLinux* windowLinux = (GPWindowLinux*)window->opaque;
+
+        if (windowLinux->text) free(windowLinux->text);
+        if (windowLinux->font) XFreeFont(windowLinux->display, windowLinux->font);
+        if (windowLinux->gc) XFreeGC(windowLinux->display, windowLinux->gc);
 
         free(windowLinux);
     }

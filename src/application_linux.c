@@ -3,6 +3,8 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "application.h"
 #include "window_linux.h"
 
@@ -61,6 +63,24 @@ int gpApplicationRun(GPApplication* application)
 int gpLog(GPApplication* application, const char* string)
 {
     GPWindowLinux* windowLinux = (GPWindowLinux*)application->window.opaque;
+
+    size_t length = strlen(string);
+    if (length == 0) return 0;
+
+    windowLinux->textSize += (length + 1); // include \n
+    windowLinux->text = realloc(windowLinux->text, windowLinux->textSize);
+
+    strcat(windowLinux->text, string);
+    strcat(windowLinux->text, "\n");
+
+    XTextItem textItem;
+    textItem.chars = windowLinux->text;
+    textItem.nchars = windowLinux->textSize - 1;
+    textItem.delta = 0;
+    textItem.font = None;
+
+    XDrawText(windowLinux->display, windowLinux->window, windowLinux->gc, 0, 0, &textItem, 1);
+    XFlush(windowLinux->display);
 
     return 1;
 }

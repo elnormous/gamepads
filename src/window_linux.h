@@ -13,4 +13,8 @@ typedef struct GPWindowLinux
     Window window;
     Atom protocolsAtom;
     Atom deleteAtom;
+    GC gc;
+    XFontStruct* font;
+    char* text;
+    size_t textSize;
 } GPWindowLinux;

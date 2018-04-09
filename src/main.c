@@ -63,7 +63,7 @@ int main(int argc, const char* argv[])
     GPApplication application;
     int i;
     int result;
-    const char* output_file = "output.txt";
+    const char* outputFile = "output.txt";
 
 #ifdef WIN32
     // TODO: implement command line parsing
@@ -74,7 +74,7 @@ int main(int argc, const char* argv[])
     {
         if (strcmp(argv[i], "-o") == 0)
         {
-            if (++i < argc) output_file = argv[i];
+            if (++i < argc) outputFile = argv[i];
         }
     }
 #endif
