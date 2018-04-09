@@ -3,6 +3,7 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "window_windows.h"
 #include "application.h"
 
@@ -115,6 +116,7 @@ int gpWindowDestroy(GPWindow* window)
     {
         GPWindowWindows* windowWindows = (GPWindowWindows*)window->opaque;
 
+        if (windowWindows->text) free(windowWindows->text);
         if (windowWindows->textBox) DestroyWindow(windowWindows->textBox);
         if (windowWindows->window) DestroyWindow(windowWindows->window);
         if (windowWindows->windowClass) UnregisterClassW(WINDOW_CLASS_NAME, GetModuleHandleW(NULL));
