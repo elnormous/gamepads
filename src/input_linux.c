@@ -19,7 +19,7 @@ typedef struct GPInputLinux
 
 static int isInputDevice(const struct dirent* dir)
 {
-	return strncmp("js", dir->d_name, 2) == 0;
+	return strncmp("event", dir->d_name, 5) == 0;
 }
 
 int gpInputInit(GPInput* input)
@@ -44,21 +44,9 @@ int gpInputInit(GPInput* input)
     	if (fd < 0) continue;
 
         char name[256];
-    	ioctl(fd, JSIOCGNAME(sizeof(name)), name);
+    	ioctl(fd, EVIOCGNAME(sizeof(name)), name);
 
-        uint8_t numAxis   = 0;
-        ioctl(fd, JSIOCGAXES, &numAxis);
-
-        uint8_t numButton = 0;
-        ioctl(fd, JSIOCGBUTTONS, &numButton);
-
-    	printf("filename: %s, name: %s, axis: %d, buttons: %d\n", filename, name, numAxis, numButton);
-
-        uint16_t* buttonMap[KEY_MAX - BTN_MISC + 1];
-        ioctl(fd, JSIOCGBTNMAP, buttonMap);
-
-        uint8_t* axisMap[ABS_MAX + 1];
-        ioctl(fd, JSIOCGAXMAP, axisMap);
+    	printf("filename: %s, name: %s\n", filename, name);
 
     	close(fd);
     }
