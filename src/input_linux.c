@@ -7,7 +7,7 @@
 #include <string.h>
 #include <dirent.h>
 #include <fcntl.h>
-#include <linux/input.h>
+#include <linux/joystick.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include "input.h"
@@ -19,7 +19,7 @@ typedef struct GPInputLinux
 
 static int isInputDevice(const struct dirent* dir)
 {
-	return strncmp("event", dir->d_name, 5) == 0;
+	return strncmp("js", dir->d_name, 2) == 0;
 }
 
 int gpInputInit(GPInput* input)
@@ -44,7 +44,7 @@ int gpInputInit(GPInput* input)
 
     	if (fd < 0) continue;
 
-    	ioctl(fd, EVIOCGNAME(sizeof(name)), name);
+    	ioctl(fd, JSIOCGNAME(sizeof(name)), name);
 
     	printf("%s, %s\n", filename, name);
 
