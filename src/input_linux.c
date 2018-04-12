@@ -36,7 +36,6 @@ int gpInputInit(GPInput* input)
     for (int i = 0; i < count; ++i)
     {
     	char filename[64];
-    	char name[256];
 
     	snprintf(filename, sizeof(filename), "/dev/input/%s", list[i]->d_name);
 
@@ -44,9 +43,22 @@ int gpInputInit(GPInput* input)
 
     	if (fd < 0) continue;
 
+        char name[256];
     	ioctl(fd, JSIOCGNAME(sizeof(name)), name);
 
-    	printf("%s, %s\n", filename, name);
+        uint8_t numAxis   = 0;
+        ioctl(fd, JSIOCGAXES, &numAxis);
+
+        uint8_t numButton = 0;
+        ioctl(fd, JSIOCGBUTTONS, &numButton);
+
+    	printf("filename: %s, name: %s, axis: %d, buttons: %d\n", filename, name, numAxis, numButton);
+
+        uint16_t* buttonMap[KEY_MAX - BTN_MISC + 1];
+        ioctl(fd, JSIOCGBTNMAP, buttonMap);
+
+        uint8_t* axisMap[ABS_MAX + 1];
+        ioctl(fd, JSIOCGAXMAP, axisMap);
 
     	close(fd);
     }
