@@ -46,7 +46,10 @@ int gpInputInit(GPInput* input)
         char name[256];
     	ioctl(fd, EVIOCGNAME(sizeof(name)), name);
 
-    	printf("filename: %s, name: %s\n", filename, name);
+    	struct input_id id;
+    	ioctl(fd, EVIOCGID, &id);
+
+    	printf("filename: %s, name: %s, vendor: %d, product: %d\n", filename, name, id.vendor, id.product);
 
     	close(fd);
     }
