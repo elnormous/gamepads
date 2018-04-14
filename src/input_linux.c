@@ -14,7 +14,7 @@
 
 typedef struct GPInputLinux
 {
-    void* data;
+    int maxFd;
 } GPInputLinux;
 
 static int isInputDevice(const struct dirent* dir)
@@ -41,7 +41,7 @@ int gpInputInit(GPInput* input)
 
     	int fd = open(filename, O_RDONLY);
 
-    	if (fd < 0) continue;
+    	if (fd == -1) continue;
 
         char name[256];
     	ioctl(fd, EVIOCGNAME(sizeof(name)), name);
