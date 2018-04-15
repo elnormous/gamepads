@@ -65,3 +65,8 @@ int gpInputDestroy(GPInput* input)
 
     return 1;
 }
+
+int gpInputUpdate(GPInput* input)
+{
+    return 1;
+}

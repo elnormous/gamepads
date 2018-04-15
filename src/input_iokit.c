@@ -187,3 +187,8 @@ int gpInputWaitKey(GPInput* input, uint32_t* usage)
 {
     return 0;
 }
+
+int gpInputUpdate(GPInput* input)
+{
+    return 1;
+}
