@@ -44,12 +44,9 @@ void threadFunc(void* argument)
 
 void gpMain(GPApplication* application)
 {
-    GPInput input;
     GPThread thread;
     GPCondition startCondition;
     GPMutex startMutex;
-
-    gpInputInit(&input);
 
     gpThreadInit(&thread, threadFunc, application, "Capture");
 }

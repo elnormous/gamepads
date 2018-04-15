@@ -24,6 +24,7 @@ int gpApplicationDestroy(GPApplication* application)
 int gpApplicationRun(GPApplication* application)
 {
     gpWindowInit(&application->window, application->argc, application->argv);
+    gpInputInit(&application->input);
 
     gpMain(application);
 
@@ -48,6 +49,8 @@ int gpApplicationRun(GPApplication* application)
         {
             break;
         }
+
+        gpInputUpdate(&application->input);
     }
 
     gpWindowDestroy(&application->window);

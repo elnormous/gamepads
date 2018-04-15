@@ -5,10 +5,12 @@
 #pragma once
 
 #include "window.h"
+#include "input.h"
 
 typedef struct GPApplication
 {
     GPWindow window;
+    GPInput input;
     int argc;
     const char** argv;
 } GPApplication;
