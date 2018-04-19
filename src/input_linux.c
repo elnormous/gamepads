@@ -38,6 +38,7 @@ int gpInputInit(GPInput* input)
     	char filename[64];
 
     	snprintf(filename, sizeof(filename), "/dev/input/%s", list[i]->d_name);
+        free(list[i]);
 
     	int fd = open(filename, O_RDONLY);
 
@@ -53,6 +54,8 @@ int gpInputInit(GPInput* input)
 
     	close(fd);
     }
+
+    free(list);
 
     return 1;
 }
