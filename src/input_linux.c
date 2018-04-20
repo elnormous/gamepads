@@ -17,9 +17,13 @@ typedef struct GPInputLinux
     int maxFd;
 } GPInputLinux;
 
-static int isInputDevice(const struct dirent* dir)
+#define DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
+#define BITS_PER_LONG (8 * sizeof(long))
+#define BITS_TO_LONGS(nr) DIV_ROUND_UP(nr, BITS_PER_LONG)
+
+static inline int isBitSet(const unsigned long* array, int bit)
 {
-	return strncmp("event", dir->d_name, 5) == 0;
+    return !!(array[bit / BITS_PER_LONG] & (1LL << (bit % BITS_PER_LONG)));
 }
 
 int gpInputInit(GPInput* input)
@@ -28,17 +32,22 @@ int gpInputInit(GPInput* input)
     memset(inputLinux, 0, sizeof(GPInputLinux));
     input->opaque = inputLinux;
 
-    struct dirent** list;
-    int count = scandir("/dev/input", &list, isInputDevice, versionsort);
+    DIR* dir = opendir("/dev/input");
 
-    if (count <= 0) return 0;
+    if (!dir)
+    {
+        fprintf(stderr, "Failed to open directory\n");
+        return 0;
+    }
 
-    for (int i = 0; i < count; ++i)
+    struct dirent ent;
+    struct dirent* p;
+
+    while (readdir_r(dir, &ent, &p) == 0 && p)
     {
     	char filename[64];
 
-    	snprintf(filename, sizeof(filename), "/dev/input/%s", list[i]->d_name);
-        free(list[i]);
+    	snprintf(filename, sizeof(filename), "/dev/input/%s", ent.d_name);
 
     	int fd = open(filename, O_RDONLY);
 
@@ -55,7 +64,7 @@ int gpInputInit(GPInput* input)
     	close(fd);
     }
 
-    free(list);
+    closedir(dir);
 
     return 1;
 }
