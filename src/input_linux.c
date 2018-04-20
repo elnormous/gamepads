@@ -45,23 +45,26 @@ int gpInputInit(GPInput* input)
 
     while (readdir_r(dir, &ent, &p) == 0 && p)
     {
-    	char filename[64];
+        if (strncmp("event", ent.d_name, 5) == 0)
+        {
+            char filename[64];
 
-    	snprintf(filename, sizeof(filename), "/dev/input/%s", ent.d_name);
+            snprintf(filename, sizeof(filename), "/dev/input/%s", ent.d_name);
 
-    	int fd = open(filename, O_RDONLY);
+            int fd = open(filename, O_RDONLY);
 
-    	if (fd == -1) continue;
+            if (fd == -1) continue;
 
-        char name[256];
-    	ioctl(fd, EVIOCGNAME(sizeof(name)), name);
+            char name[256];
+            ioctl(fd, EVIOCGNAME(sizeof(name)), name);
 
-    	struct input_id id;
-    	ioctl(fd, EVIOCGID, &id);
+            struct input_id id;
+            ioctl(fd, EVIOCGID, &id);
 
-    	printf("filename: %s, name: %s, vendor: %d, product: %d\n", filename, name, id.vendor, id.product);
+            printf("filename: %s, name: %s, vendor: %d, product: %d\n", filename, name, id.vendor, id.product);
 
-    	close(fd);
+            close(fd);
+        }
     }
 
     closedir(dir);
