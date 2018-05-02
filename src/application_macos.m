@@ -61,19 +61,6 @@ int gpApplicationInit(GPApplication* application, int argc, const char** argv)
     application->argc = argc;
     application->argv = argv;
 
-    NSMenu* mainMenu = [[[NSMenu alloc] initWithTitle:@"Main Menu"] autorelease];
-
-    NSMenuItem* mainMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Gamepads" action:nil keyEquivalent:@""] autorelease];
-    [mainMenu addItem:mainMenuItem];
-
-    NSMenu* subMenu = [[[NSMenu alloc] initWithTitle:@"Gamepads"] autorelease];
-    [mainMenuItem setSubmenu:subMenu];
-
-    NSMenuItem* quitItem = [[[NSMenuItem alloc] initWithTitle:@"Quit" action:NSSelectorFromString(@"handleQuit:") keyEquivalent:@"q"] autorelease];
-    [subMenu addItem:quitItem];
-
-    [NSApplication sharedApplication].mainMenu = mainMenu;
-
     return 1;
 }
 
@@ -89,6 +76,20 @@ int gpApplicationRun(GPApplication* application)
     NSApplication* sharedApplication = [NSApplication sharedApplication];
     [sharedApplication activateIgnoringOtherApps:YES];
     [sharedApplication setDelegate:[[[AppDelegate alloc] initWithApplication:application] autorelease]];
+
+    NSMenu* mainMenu = [[[NSMenu alloc] initWithTitle:@"Main Menu"] autorelease];
+
+    NSMenuItem* mainMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Gamepads" action:nil keyEquivalent:@""] autorelease];
+    [mainMenu addItem:mainMenuItem];
+
+    NSMenu* subMenu = [[[NSMenu alloc] initWithTitle:@"Gamepads"] autorelease];
+    [mainMenuItem setSubmenu:subMenu];
+
+    NSMenuItem* quitItem = [[[NSMenuItem alloc] initWithTitle:@"Quit" action:NSSelectorFromString(@"handleQuit:") keyEquivalent:@"q"] autorelease];
+    [subMenu addItem:quitItem];
+
+    sharedApplication.mainMenu = mainMenu;
+
     [sharedApplication run];
 
     [pool release];
