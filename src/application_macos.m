@@ -79,10 +79,10 @@ int gpApplicationRun(GPApplication* application)
 
     NSMenu* mainMenu = [[[NSMenu alloc] initWithTitle:@"Main Menu"] autorelease];
 
-    NSMenuItem* mainMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Gamepads" action:nil keyEquivalent:@""] autorelease];
+    NSMenuItem* mainMenuItem = [[[NSMenuItem alloc] init] autorelease];
     [mainMenu addItem:mainMenuItem];
 
-    NSMenu* subMenu = [[[NSMenu alloc] initWithTitle:@"Gamepads"] autorelease];
+    NSMenu* subMenu = [[[NSMenu alloc] init] autorelease];
     [mainMenuItem setSubmenu:subMenu];
 
     NSMenuItem* quitItem = [[[NSMenuItem alloc] initWithTitle:@"Quit" action:NSSelectorFromString(@"handleQuit:") keyEquivalent:@"q"] autorelease];
