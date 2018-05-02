@@ -54,6 +54,11 @@ void gpMain(GPApplication* application);
 {
 }
 
+-(void)handleQuit:(__unused id)sender
+{
+    [[NSApplication sharedApplication] terminate:nil];
+}
+
 @end
 
 int gpApplicationInit(GPApplication* application, int argc, const char** argv)
@@ -86,6 +91,7 @@ int gpApplicationRun(GPApplication* application)
     [mainMenuItem setSubmenu:subMenu];
 
     NSMenuItem* quitItem = [[[NSMenuItem alloc] initWithTitle:@"Quit" action:NSSelectorFromString(@"handleQuit:") keyEquivalent:@"q"] autorelease];
+    [quitItem setTarget: [sharedApplication delegate]];
     [subMenu addItem:quitItem];
 
     sharedApplication.mainMenu = mainMenu;

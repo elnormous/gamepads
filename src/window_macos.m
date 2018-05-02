@@ -24,11 +24,6 @@
     return self;
 }
 
--(void)handleQuit:(__unused id)sender
-{
-    [[NSApplication sharedApplication] terminate:nil];
-}
-
 @end
 
 int gpWindowInit(GPWindow* window, int argc, const char** argv)
