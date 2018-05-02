@@ -23,16 +23,20 @@ int gpApplicationDestroy(GPApplication* application)
 
 int gpApplicationRun(GPApplication* application)
 {
-    gpWindowInit(&application->window, application->argc, application->argv);
-    gpInputInit(&application->input);
+    if (!gpWindowInit(&application->window, application->argc, application->argv))
+        return 0;
+
+    if (!gpInputInit(&application->input))
+        return 0;
 
     gpMain(application);
 
+    GPWindowWindows* windowWindows = (GPWindowWindows*)application->window.opaque;
     MSG msg;
     BOOL ret;
     for (;;)
     {
-        ret = GetMessage(&msg, NULL, 0, 0);
+        ret = GetMessage(&msg, windowWindows->window, 0, 0);
 
         if (ret > 0)
         {
