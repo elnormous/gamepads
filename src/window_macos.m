@@ -26,6 +26,7 @@
 
 -(void)handleQuit:(__unused id)sender
 {
+    [[NSApplication sharedApplication] terminate:nil];
 }
 
 @end
