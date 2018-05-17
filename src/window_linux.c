@@ -32,7 +32,7 @@ int gpWindowInit(GPWindow* window, int argc, const char** argv)
     XSetWindowAttributes swa;
     swa.background_pixel = XWhitePixel(windowLinux->display, screenIndex);
     swa.border_pixel = 0;
-    swa.event_mask = KeyPress;
+    swa.event_mask = KeyPressMask;
 
     windowLinux->window = XCreateWindow(windowLinux->display,
         RootWindow(windowLinux->display, screenIndex),
