@@ -77,11 +77,12 @@ int gpWindowDestroy(GPWindow* window)
         GPWindowLinux* windowLinux = (GPWindowLinux*)window->opaque;
 
         if (windowLinux->text) free(windowLinux->text);
-        if (windowLinux->font) XFreeFont(windowLinux->display, windowLinux->font);
-        if (windowLinux->gc) XFreeGC(windowLinux->display, windowLinux->gc);
 
         if (windowLinux->display)
         {
+            if (windowLinux->font) XFreeFont(windowLinux->display, windowLinux->font);
+            if (windowLinux->gc) XFreeGC(windowLinux->display, windowLinux->gc);
+
             if (windowLinux->window)
                 XDestroyWindow(windowLinux->display, windowLinux->window);
 
