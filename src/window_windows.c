@@ -40,7 +40,7 @@ static LRESULT CALLBACK windowProc(HWND window, UINT msg, WPARAM wParam, LPARAM 
 
 static const LPCWSTR WINDOW_CLASS_NAME = L"gamepads";
 
-int gpWindowInit(GPWindow* window, int argc, const char** argv)
+int gpWindowInit(GPWindow* window)
 {
     GPWindowWindows* windowWindows = malloc(sizeof(GPWindowWindows));
     memset(windowWindows, 0, sizeof(GPWindowWindows));

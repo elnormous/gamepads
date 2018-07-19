@@ -76,7 +76,7 @@ int main(int argc, const char* argv[])
     }
 #endif
 
-    gpApplicationInit(&application, argc, argv);
+    gpApplicationInit(&application);
     result = gpApplicationRun(&application) ? EXIT_SUCCESS : EXIT_FAILURE;
     gpApplicationDestroy(&application);
 

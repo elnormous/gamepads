@@ -9,7 +9,7 @@
 #include "window_linux.h"
 #include "application.h"
 
-int gpWindowInit(GPWindow* window, int argc, const char** argv)
+int gpWindowInit(GPWindow* window)
 {
     GPWindowLinux* windowLinux = malloc(sizeof(GPWindowLinux));
     memset(windowLinux, 0, sizeof(GPWindowLinux));
@@ -41,9 +41,8 @@ int gpWindowInit(GPWindow* window, int argc, const char** argv)
         DefaultVisual(windowLinux->display, screenIndex),
         CWBorderPixel | CWBackPixel | CWEventMask, &swa);
 
-    XSetStandardProperties(windowLinux->display,
-        windowLinux->window, "Gamepads", "Gamepads", None,
-        argv, argc, NULL);
+    XSetStandardProperties(windowLinux->display, windowLinux->window,
+                           "Gamepads", "Gamepads", None, NULL, 0, NULL);
 
     XMapWindow(windowLinux->display, windowLinux->window);
 
