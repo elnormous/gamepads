@@ -28,9 +28,7 @@ static void deviceInput(void* ctx, IOReturn result, void* sender, IOHIDValueRef 
         type == kIOHIDElementTypeInput_Button)
     {
         if (usage == kHIDUsage_KeyboardEscape)
-        {
             printf("Escape %s\n", newValue ? "down" : "up");
-        }
     }
 }
 
@@ -74,22 +72,16 @@ static void deviceAdded(void* ctx, IOReturn result, void* sender, IOHIDDeviceRef
         {
             CFNumberRef vendor = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDVendorIDKey));
             if (vendor)
-            {
                 CFNumberGetValue(vendor, kCFNumberSInt32Type, &vendorId);
-            }
 
             CFNumberRef product = (CFNumberRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDProductIDKey));
             if (product)
-            {
                 CFNumberGetValue(product, kCFNumberSInt32Type, &productId);
-            }
 
             CFStringRef productName = (CFStringRef)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDProductKey));
 
             if (productName)
-            {
                 CFStringGetCString(productName, name, sizeof(name), kCFStringEncodingUTF8);
-            }
 
             fprintf(stdout, "Name: %s, vendor ID: 0x%04X, product ID: 0x%04X\n", name, vendorId, productId);
         }

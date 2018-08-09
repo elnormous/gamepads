@@ -26,7 +26,7 @@
 
 @end
 
-int gpWindowInit(GPWindow* window, int argc, const char** argv)
+int gpWindowInit(GPWindow* window)
 {
     GPWindowMacOS* windowMacOS = malloc(sizeof(GPWindowMacOS));
     memset(windowMacOS, 0, sizeof(GPWindowMacOS));

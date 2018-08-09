@@ -8,11 +8,8 @@
 
 void gpMain(GPApplication* application);
 
-int gpApplicationInit(GPApplication* application, int argc, const char** argv)
+int gpApplicationInit(GPApplication* application)
 {
-    application->argc = argc;
-    application->argv = argv;
-
     return 1;
 }
 
@@ -23,7 +20,7 @@ int gpApplicationDestroy(GPApplication* application)
 
 int gpApplicationRun(GPApplication* application)
 {
-    if (!gpWindowInit(&application->window, application->argc, application->argv))
+    if (!gpWindowInit(&application->window))
         return 0;
 
     if (!gpInputInit(&application->input))
@@ -49,9 +46,7 @@ int gpApplicationRun(GPApplication* application)
             return 0;
         }
         else
-        {
             break;
-        }
 
         gpInputUpdate(&application->input);
     }
