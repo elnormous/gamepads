@@ -2,7 +2,8 @@
 //  gamepads
 //
 
-#pragma once
+#ifndef WINDOW_MACOS_H
+#define WINDOW_MACOS_H
 
 #import <Cocoa/Cocoa.h>
 #include "window.h"
@@ -15,3 +16,5 @@ typedef struct GPWindowMacOS
     NSObject<NSWindowDelegate>* windowDelegate;
     NSMutableString* text;
 } GPWindowMacOS;
+
+#endif

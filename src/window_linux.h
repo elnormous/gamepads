@@ -2,7 +2,8 @@
 //  gamepads
 //
 
-#pragma once
+#ifndef WINDOW_LINUX_H
+#define WINDOW_LINUX_H
 
 #include <X11/Xlib.h>
 #include "window.h"
@@ -18,3 +19,5 @@ typedef struct GPWindowLinux
     char* text;
     size_t textSize;
 } GPWindowLinux;
+
+#endif

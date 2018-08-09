@@ -2,7 +2,8 @@
 //  gamepads
 //
 
-#pragma once
+#ifndef INPUT_H
+#define INPUT_H
 
 #include <stdint.h>
 
@@ -20,3 +21,5 @@ int gpInputInit(GPInput* input);
 int gpInputDestroy(GPInput* input);
 int gpInputUpdate(GPInput* input);
 int gpInputWaitKey(GPInput* input, uint32_t* usage);
+
+#endif

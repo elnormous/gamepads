@@ -2,7 +2,8 @@
 //  gamepads
 //
 
-#pragma once
+#ifndef THREAD_H
+#define THREAD_H
 
 #include <stdint.h>
 #if defined(_MSC_VER)
@@ -54,3 +55,5 @@ int gpConditionBroadcast(GPCondition* condition);
 int gpConditionWait(GPCondition* condition, GPMutex* mutex);
 int gpConditionTimedWait(GPCondition* condition, GPMutex* mutex, uint64_t ns);
 int gpInterlockedCompareAndSwap(int32_t oldValue, int32_t newValue, int32_t* value);
+
+#endif

@@ -2,7 +2,8 @@
 //  gamepads
 //
 
-#pragma once
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
 #include "window.h"
 #include "input.h"
@@ -19,3 +20,5 @@ int gpApplicationInit(GPApplication* application, int argc, const char** argv);
 int gpApplicationDestroy(GPApplication* application);
 int gpApplicationRun(GPApplication* application);
 int gpLog(GPApplication* application, const char* string);
+
+#endif

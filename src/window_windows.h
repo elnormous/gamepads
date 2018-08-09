@@ -2,7 +2,8 @@
 //  gamepads
 //
 
-#pragma once
+#ifndef WINDOW_WINDOWS_H
+#define WINDOW_WINDOWS_H
 
 #include <Windows.h>
 #include "window.h"
@@ -15,3 +16,5 @@ typedef struct GPWindowWindows
     LPWSTR* text;
     size_t textSize;
 } GPWindowWindows;
+
+#endif
