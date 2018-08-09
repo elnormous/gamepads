@@ -13,7 +13,6 @@
 		306944DC205DF43400C4969C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984F2202D38FF00BB0340 /* main.c */; };
 		306944DD205DF43400C4969C /* thread.c in Sources */ = {isa = PBXBuildFile; fileRef = 300984FA202E95F700BB0340 /* thread.c */; };
 		306944DE205DF43400C4969C /* application_macos.m in Sources */ = {isa = PBXBuildFile; fileRef = 306944A6205DF13900C4969C /* application_macos.m */; };
-		306944E1205E00A900C4969C /* window_macos.m in Sources */ = {isa = PBXBuildFile; fileRef = 306944E0205E00A900C4969C /* window_macos.m */; };
 		306944E52068654C00C4969C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3071DEAB20425CEC0073390E /* IOKit.framework */; };
 		306944E62068655200C4969C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3071DEA920425CE50073390E /* Foundation.framework */; };
 		306944E82068655900C4969C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 306944E72068655900C4969C /* Cocoa.framework */; };
@@ -32,11 +31,9 @@
 		306944B2205DF40A00C4969C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		306944B7205DF40A00C4969C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		306944DF205E00A900C4969C /* window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = "<group>"; };
-		306944E0205E00A900C4969C /* window_macos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = window_macos.m; sourceTree = "<group>"; };
 		306944E72068655900C4969C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		3071DEA920425CE50073390E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3071DEAB20425CEC0073390E /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		30971FB2206BDA1C000D196D /* window_macos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = window_macos.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,8 +79,6 @@
 				300984F2202D38FF00BB0340 /* main.c */,
 				300984FA202E95F700BB0340 /* thread.c */,
 				300984F9202E95F700BB0340 /* thread.h */,
-				30971FB2206BDA1C000D196D /* window_macos.h */,
-				306944E0205E00A900C4969C /* window_macos.m */,
 				306944DF205E00A900C4969C /* window.h */,
 			);
 			path = src;
@@ -180,7 +175,6 @@
 				306944DC205DF43400C4969C /* main.c in Sources */,
 				306944DE205DF43400C4969C /* application_macos.m in Sources */,
 				306944DB205DF43400C4969C /* input_iokit.c in Sources */,
-				306944E1205E00A900C4969C /* window_macos.m in Sources */,
 				306944DA205DF43400C4969C /* input.c in Sources */,
 				306944DD205DF43400C4969C /* thread.c in Sources */,
 			);

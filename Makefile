@@ -26,16 +26,13 @@ SOURCES=src/main.c \
 	src/thread.c
 ifeq ($(platform),windows)
 SOURCES+=src/application_windows.c \
-	src/input_dinput.c \
-	src/window_windows.c
+	src/input_dinput.c
 else ifeq ($(platform),linux)
 SOURCES+=src/application_linux.c \
-	src/input_linux.c \
-	src/window_linux.c
+	src/input_linux.c
 else ifeq ($(platform),macos)
 SOURCES+=src/application_macos.c \
-	src/input_iokit.c \
-	src/window_macos.c
+	src/input_iokit.c
 endif
 BASE_NAMES=$(basename $(SOURCES))
 OBJECTS=$(BASE_NAMES:=.o)
