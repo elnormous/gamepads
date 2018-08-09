@@ -30,9 +30,6 @@
     <ClCompile Include="src\application_windows.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\window_windows.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\input.h">
