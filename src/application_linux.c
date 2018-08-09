@@ -8,7 +8,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include "application.h"
-#include "window_linux.h"
 
 void gpMain(GPApplication* application);
 

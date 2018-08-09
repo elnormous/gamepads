@@ -7,7 +7,6 @@
 #include <Windows.h>
 #include <Strsafe.h>
 #include "application.h"
-#include "window_windows.h"
 
 void gpMain(GPApplication* application);
 
