@@ -5,8 +5,15 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "window.h"
 #include "input.h"
+
+typedef struct GPWindow
+{
+    void* opaque;
+} GPWindow;
+
+int gpWindowInit(GPWindow* window);
+int gpWindowDestroy(GPWindow* window);
 
 typedef struct GPApplication
 {
