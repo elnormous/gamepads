@@ -52,6 +52,8 @@ int gpInputInit(GPInput* input)
             snprintf(filename, sizeof(filename), "/dev/input/%s", ent.d_name);
 
             int fd = open(filename, O_RDONLY);
+            while (fd == -1 && errno == EINTR)
+                fd = open(filename, O_RDONLY);
 
             if (fd == -1) continue;
 
@@ -83,5 +85,6 @@ int gpInputDestroy(GPInput* input)
 
 int gpInputUpdate(GPInput* input)
 {
+    // TODO: implement
     return 1;
 }
