@@ -10,7 +10,7 @@ else
 		platform=macos
 	endif
 endif
-CFLAGS=-c -Wall -O2
+CFLAGS=-Wall -O2
 LDFLAGS=-O2
 ifeq ($(platform),windows)
 LDFLAGS+=-u WinMain -ldinput8.lib -ldxguid.lib
@@ -65,8 +65,10 @@ endif
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
+-include $(DEPENDENCIES)
+
 %.o: %.c
-	$(CC) $(CFLAGS) -MMD -MP $< -o $@
+	$(CC) -c $(CFLAGS) -MMD -MP $< -o $@
 
 .PHONY: clean
 clean:
