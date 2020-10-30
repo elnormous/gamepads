@@ -1,36 +1,36 @@
-debug=0
+DEBUG=0
 ifeq ($(OS),Windows_NT)
-	platform=windows
+	PLATFORM=windows
 else
 	UNAME:=$(shell uname -s)
 	ifeq ($(UNAME),Linux)
-		platform=linux
+		PLATFORM=linux
 	endif
 	ifeq ($(UNAME),Darwin)
-		platform=macos
+		PLATFORM=macos
 	endif
 endif
 CFLAGS=-Wall -O2
 LDFLAGS=-O2
-ifeq ($(platform),windows)
+ifeq ($(PLATFORM),windows)
 LDFLAGS+=-u WinMain -ldinput8.lib -ldxguid.lib
-else ifeq ($(platform),linux)
+else ifeq ($(PLATFORM),linux)
 CFLAGS+=-D_GNU_SOURCE
 LDFLAGS+=-lpthread -lX11
-else ifeq ($(platform),macos)
+else ifeq ($(PLATFORM),macos)
 LDFLAGS+=-framework Cocoa -framework Foundation -framework IOKit
 endif
 
 SOURCES=src/main.c \
 	src/input.c \
 	src/thread.c
-ifeq ($(platform),windows)
+ifeq ($(PLATFORM),windows)
 SOURCES+=src/application_windows.c \
 	src/input_dinput.c
-else ifeq ($(platform),linux)
+else ifeq ($(PLATFORM),linux)
 SOURCES+=src/application_linux.c \
 	src/input_linux.c
-else ifeq ($(platform),macos)
+else ifeq ($(PLATFORM),macos)
 SOURCES+=src/application_macos.c \
 	src/input_iokit.c
 endif
@@ -40,14 +40,14 @@ DEPENDENCIES=$(OBJECTS:.o=.d)
 EXECUTABLE=gamepads
 
 .PHONY: all
-ifeq ($(debug),1)
+ifeq ($(DEBUG),1)
 all: CFLAGS+=-DDEBUG -g
 endif
 all: bundle
 
 .PHONY: bundle
 bundle: $(EXECUTABLE)
-ifeq ($(platform),macos)
+ifeq ($(PLATFORM),macos)
 bundle:
 	mkdir -p $(EXECUTABLE).app
 	mkdir -p $(EXECUTABLE).app/Contents
@@ -72,7 +72,7 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-ifeq ($(platform),windows)
+ifeq ($(PLATFORM),windows)
 	-del /f /q $(EXECUTABLE).exe src\*.o src\*.d
 else
 	$(RM) $(EXECUTABLE) src/*.o src/*.d $(EXECUTABLE).exe
