@@ -75,6 +75,6 @@ clean:
 ifeq ($(PLATFORM),windows)
 	-del /f /q $(EXECUTABLE).exe src\*.o src\*.d
 else
-	$(RM) $(EXECUTABLE) src/*.o src/*.d $(EXECUTABLE).exe
+	$(RM) $(EXECUTABLE) $(OBJECTS) $(DEPENDENCIES) $(EXECUTABLE).exe
 	$(RM) -r $(EXECUTABLE).app
 endif
